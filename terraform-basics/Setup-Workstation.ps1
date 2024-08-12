@@ -29,15 +29,17 @@ Install-Module -Name Pester -Force -SkipPublisherCheck
 
 # Create tests directory
 if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
-    New-Item -Path 'C:\' -Name "Tests" -ItemType Directory
+    $null = New-Item -Path 'C:\' -Name "Tests" -ItemType Directory
 }
 
 # Download Pester Tests
 ## Terraform basic hackathon tests
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/hackathon.tests.ps1' -OutFile 'C:\Temp\hackathon.tests.ps1' -UseBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/hackathon.tests.ps1' -OutFile 'C:\Tests\hackathon.tests.ps1' -UseBasicParsing
 ## Pode Server file
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Server.ps1' -OutFile 'C:\Temp\Server.ps1' -UseBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Server.ps1' -OutFile 'C:\Tests\Server.ps1' -UseBasicParsing
 
+# Enable Access using Windows Firewall
+New-NetFirewallRule -DisplayName "AllowPodeWebServer" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
 
 # Setup Pode as a Service
 # As per: https://pode.readthedocs.io/en/stable/Hosting/RunAsService/
