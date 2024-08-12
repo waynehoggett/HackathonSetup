@@ -34,9 +34,9 @@ if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
 
 # Download Pester Tests
 ## Terraform basic hackathon tests
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/hackathon.tests.ps1' -OutFile 'C:\Temp\hackathon.tests.ps1' -UserBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/hackathon.tests.ps1' -OutFile 'C:\Temp\hackathon.tests.ps1' -UseBasicParsing
 ## Pode Server file
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Server.ps1' -OutFile 'C:\Temp\Server.ps1' -UserBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Server.ps1' -OutFile 'C:\Temp\Server.ps1' -UseBasicParsing
 
 
 # Setup Pode as a Service
