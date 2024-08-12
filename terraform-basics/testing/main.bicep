@@ -1,5 +1,4 @@
 param guid string = newGuid()
-param basDnsPrefix string = 'bas${uniqueString(guid)}'
 param dnsPrefix string = 'hack${uniqueString(guid)}'
 param location string = resourceGroup().location
 param virtualNetworkName string = 'vnet-${uniqueString(guid)}'
@@ -15,7 +14,7 @@ resource bastionPublicIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: basDnsPrefix
+      domainNameLabel: dnsPrefix
     }
   }
 }
