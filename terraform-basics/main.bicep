@@ -12,6 +12,9 @@ param vmPassword string = 'Password!${uniqueString(guid)}'
 resource bastionPublicIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   name: 'pip1-bastion'
   location: location
+  sku: {
+    name: 'Standard'
+  }
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
@@ -22,6 +25,7 @@ resource bastionPublicIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
 
 resource bastion 'Microsoft.Network/bastionHosts@2024-01-01' = {
   name: 'bastion'
+  location: location
   sku: {
     name: 'Standard'
   }
@@ -197,7 +201,7 @@ resource windowsVMExtensions 'Microsoft.Compute/virtualMachines/extensions@2020-
     autoUpgradeMinorVersion: true
     settings: {
       fileUris: [
-        'https://gist.githubusercontent.com/waynehoggett/3160f95e5794d6dfa0121aecc977dac8/raw/037822ae8693e780986fdf01097a12f6c5a9abd0/Setup-Workstation.ps1'
+        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Setup-Workstation.ps1'
       ]
     }
     protectedSettings: {

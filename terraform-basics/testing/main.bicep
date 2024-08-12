@@ -1,4 +1,5 @@
 param guid string = newGuid()
+param basDnsPrefix string = 'bas${uniqueString(guid)}'
 param dnsPrefix string = 'hack${uniqueString(guid)}'
 param location string = resourceGroup().location
 param virtualNetworkName string = 'vnet-${uniqueString(guid)}'
@@ -11,16 +12,20 @@ param vmPassword string = 'Password!${uniqueString(guid)}'
 resource bastionPublicIP 'Microsoft.Network/publicIPAddresses@2019-11-01' = {
   name: 'pip1-bastion'
   location: location
+  sku: {
+    name: 'Standard'
+  }
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: dnsPrefix
+      domainNameLabel: basDnsPrefix
     }
   }
 }
 
 resource bastion 'Microsoft.Network/bastionHosts@2024-01-01' = {
   name: 'bastion'
+  location: location
   sku: {
     name: 'Standard'
   }

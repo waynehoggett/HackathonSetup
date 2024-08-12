@@ -27,11 +27,17 @@ Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
 Install-Module Pode -Force
 Install-Module -Name Pester -Force -SkipPublisherCheck
 
+# Create tests directory
+if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
+    New-Item -Path 'C:\' -Name "Tests" -ItemType Directory
+}
+
 # Download Pester Tests
 ## Terraform basic hackathon tests
-https://gist.githubusercontent.com/waynehoggett/23149ad1b154189f6a51a00753c7a1f7/raw/TerraformBasics.tests.ps1
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/hackathon.tests.ps1' -OutFile 'C:\Temp\hackathon.tests.ps1' -UserBasicParsing
 ## Pode Server file
-https://gist.githubusercontent.com/waynehoggett/90f363c1510e5590579d1e6eac272c1a/raw//Server.ps1
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Server.ps1' -OutFile 'C:\Temp\Server.ps1' -UserBasicParsing
+
 
 # Setup Pode as a Service
 # As per: https://pode.readthedocs.io/en/stable/Hosting/RunAsService/
