@@ -211,6 +211,7 @@ resource windowsVMExtensions 'Microsoft.Compute/virtualMachines/extensions@2020-
 }
 
 output IPAddress string = publicIP.properties.ipAddress
+output vmName string = vmName
 output DNSName string = publicIP.properties.dnsSettings.fqdn
 output username string = vmUsername
 #disable-next-line outputs-should-not-contain-secrets
