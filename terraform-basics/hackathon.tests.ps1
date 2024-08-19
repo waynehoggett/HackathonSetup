@@ -13,7 +13,7 @@ Describe "Configure Terraform" -Tags 1 {
         $File | Should -Not -BeNullOrEmpty
     }
     It "main.tf should include the terraform block" {
-        $RequiredString = Select-String -Pattern 'terraform\s*\{\s*[^}]*\}' -Path "C:\Terraform\main.tf"
+        $RequiredString = Select-String -Pattern '/terraform\s*\{\s*[^}]*\}/m' -Path "C:\Terraform\main.tf"
         $RequiredString | Should -Not -BeNullOrEmpty
     }
     It "main.tf should include the pessimistic constraint operator" {
