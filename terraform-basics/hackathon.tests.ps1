@@ -60,3 +60,11 @@ Describe "Configure Providers" -Tags 2 {
         $RequiredString | Should -Not -BeNullOrEmpty
     }
 }
+
+Describe "Initialize Terraform" -Tags 3 {
+    It "azurerm provider should be downloaded to C:\Terraform\.terraform" {
+        $Path = Get-Item -Path "C:\Terraform\.terraform\providers\registry.terraform.io\hashicorp\azurerm" -ErrorAction SilentlyContinue
+        $Path | Should -Not -BeNullOrEmpty
+    }
+}
+
