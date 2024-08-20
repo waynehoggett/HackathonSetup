@@ -43,7 +43,7 @@ Describe "Configure Providers" -Tags 2 {
         $RequiredString = Select-String -Pattern "version" -SimpleMatch -Path "C:\Terraform\main.tf"
         $RequiredString | Should -Not -BeNullOrEmpty
     }
-    It "Provider ersion is correct" {
+    It "Provider version is correct" {
         $RequiredString = Select-String -Pattern "3.116.0" -SimpleMatch -Path "C:\Terraform\main.tf"
         $RequiredString | Should -Not -BeNullOrEmpty
     }
