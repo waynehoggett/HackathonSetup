@@ -25,3 +25,38 @@ Describe "Configure Terraform" -Tags 1 {
         $RequiredString | Should -Not -BeNullOrEmpty
     }
 }
+
+Describe "Configure Providers" -Tags 2 {
+    It "C:\Terraform\main.tf should exist" {
+        $File = Get-Item -Path "C:\Terraform\main.tf" -ErrorAction SilentlyContinue
+        $File | Should -Not -BeNullOrEmpty
+    }
+    It "Provider source is specified" {
+        $RequiredString = Select-String -Pattern "source" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "Provider source is correct" {
+        $RequiredString = Select-String -Pattern "hashicorp/azurerm" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "Provider version is specified" {
+        $RequiredString = Select-String -Pattern "version" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "Provider ersion is correct" {
+        $RequiredString = Select-String -Pattern "3.116.0" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "Provider block is specifed" {
+        $RequiredString = Select-String -Pattern "provider" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "skip_provider_registration is specifed" {
+        $RequiredString = Select-String -Pattern "skip_provider_registration" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "Features block exists" {
+        $RequiredString = Select-String -Pattern "features" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+}
