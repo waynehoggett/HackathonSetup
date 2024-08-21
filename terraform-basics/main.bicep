@@ -53,6 +53,9 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   #disable-next-line use-stable-resource-identifiers
   name: vmName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     hardwareProfile: {
       vmSize: vmSize
