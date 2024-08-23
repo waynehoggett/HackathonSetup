@@ -5,6 +5,12 @@ Describe "Terraform Installation" -Tags 0 {
         $terraformPath = Get-Command terraform -ErrorAction SilentlyContinue
         $terraformPath | Should -Not -BeNullOrEmpty
     }
+    It "Should have Azure CLI Installed installed" {
+        # Check if az command is available
+        $azpath = Get-Command az -ErrorAction SilentlyContinue
+        $azpath | Should -Not -BeNullOrEmpty
+    }
+    
 }
 
 Describe "Configure Terraform" -Tags 1 {
