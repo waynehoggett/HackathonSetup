@@ -106,7 +106,7 @@ Describe "Reference Existing Resources" -Tags 4 {
     }
 }
 
-Describe "Deploy a Virtual Network" -Tags 4 {
+Describe "Deploy a Virtual Network" -Tags 5 {
     It "resource block is specifed" {
         $RequiredString = Select-String -Pattern "resource" -SimpleMatch -Path "C:\Terraform\main.tf"
         $RequiredString | Should -Not -BeNullOrEmpty
@@ -115,12 +115,28 @@ Describe "Deploy a Virtual Network" -Tags 4 {
         $RequiredString = Select-String -Pattern "azurerm_virtual_network" -SimpleMatch -Path "C:\Terraform\main.tf"
         $RequiredString | Should -Not -BeNullOrEmpty
     }
-    It "10.0.0.0/16 value is specified" {
-        $RequiredString = Select-String -Pattern "10.0.0.0/16" -SimpleMatch -Path "C:\Terraform\main.tf"
-        $RequiredString | Should -Not -BeNullOrEmpty
+    It "Virtual Network address space is 10.0.0.0/16 in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "10.0.0.0/16"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.address_space
+        $ActualValue | Should -Be $RequiredValue
     }
-    It "10.0.0.0/24 value is specified" {
-        $RequiredString = Select-String -Pattern "10.0.0.0/24" -SimpleMatch -Path "C:\Terraform\main.tf"
-        $RequiredString | Should -Not -BeNullOrEmpty
+    It "First Virtual Network subnet address space is 10.0.0.0/24 in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "10.0.0.0/24"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+        $ActualValue | Should -Be $RequiredValue
     }
+    ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+    It "Managed Virtual Network is present in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" -and $_.mode -eq "managed" }
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "Data Resource Group is present in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_resource_group" -and $_.mode -eq "data" }
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    
 }
