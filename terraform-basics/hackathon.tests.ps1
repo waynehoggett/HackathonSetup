@@ -107,14 +107,6 @@ Describe "Reference Existing Resources" -Tags 4 {
 }
 
 Describe "Deploy a Virtual Network" -Tags 5 {
-    It "resource block is specifed" {
-        $RequiredString = Select-String -Pattern "resource" -SimpleMatch -Path "C:\Terraform\main.tf"
-        $RequiredString | Should -Not -BeNullOrEmpty
-    }
-    It "azurerm_virtual_network resource type is specifed" {
-        $RequiredString = Select-String -Pattern "azurerm_virtual_network" -SimpleMatch -Path "C:\Terraform\main.tf"
-        $RequiredString | Should -Not -BeNullOrEmpty
-    }
     It "Virtual Network address space is 10.0.0.0/16 in state" {
         $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
         $RequiredValue = "10.0.0.0/16"
@@ -127,7 +119,6 @@ Describe "Deploy a Virtual Network" -Tags 5 {
         $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
         $ActualValue | Should -Be $RequiredValue
     }
-    ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
     It "Managed Virtual Network is present in state" {
         $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
         $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" -and $_.mode -eq "managed" }
@@ -138,5 +129,64 @@ Describe "Deploy a Virtual Network" -Tags 5 {
         $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_resource_group" -and $_.mode -eq "data" }
         $RequiredResource | Should -Not -BeNullOrEmpty
     }
-    
+}
+
+Describe "Update Resources" -Tags 6 {
+    It "Virtual Network address space is 10.1.0.0/16 in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "10.1.0.0/16"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.address_space
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "First Virtual Network subnet address space is 10.1.0.0/24 in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "10.1.0.0/24"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "Managed Virtual Network is present in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" -and $_.mode -eq "managed" }
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+}
+
+Describe "Update Resources" -Tags 7 {
+    It "Managed Storage Account is present in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_storage_account" -and $_.mode -eq "managed" }
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "Storage Account replication type is ZRS" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "ZRS"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" }).instances[0].attributes.account_replication_type
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "Storage Account tier type is Standard" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "Standard"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" }).instances[0].attributes.account_tier
+        $ActualValue | Should -Be $RequiredValue
+    }
+}
+
+Describe "Update Resources" -Tags 8 {
+    It "State should not exist locally" {
+        $State = Get-Item -Path "C:\Terraform\terraform.tfstate"
+        $State | Should -BeNullOrEmpty
+    }
+    It "State backup should not exist locally" {
+        $State = Get-Item -Path "C:\Terraform\terraform.tfstate.backup"
+        $State | Should -BeNullOrEmpty
+    }
+    It "State should exist in storage account in tfstate container" {
+        Connect-AzAccount -Identity
+        $StorageAccount = Get-AzStorageAccount
+        $Key = Get-AzStorageAccountKey -ResourceGroupName $StorageAccount.ResourceGroupName -Name $StorageAccount.StorageAccountName | Where-Object KeyName -eq 'key1' | Select-Object -ExpandProperty Value
+        $Context = New-AzStorageContext -StorageAccountName $StorageAccount.StorageAccountName -StorageAccountKey $Key
+        $RequiredBlob = Get-AzStorageBlob -Container tfstate -Context $Context
+        $RequiredBlob | Should -Not -BeNullOrEmpty
+    }
+
 }
