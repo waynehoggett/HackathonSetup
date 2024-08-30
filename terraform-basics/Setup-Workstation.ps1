@@ -7,9 +7,10 @@ New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Curr
 New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" -Name "ProtectYourPC" -Value 3 -PropertyType DWORD -Force 
 New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" -Name "SkipUserOOBE" -Value 1 -PropertyType DWORD -Force
 
-# Install Chocolatey (gave up on winget)
+# Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
+# Load the Chocolatey Module
 $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 
@@ -17,16 +18,18 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 refreshenv
 
 # Install Software using Chocolatey
-## vscode for the hackathon
-choco install vscode -y
+## vscode for the hackathon, in the background to save launch time
+Start-Job -ScriptBlock { choco install vscode -y }
 ## nssm for hosting Pode as a service
 choco install nssm -y
 
-# Install Modules
+# Install Minimum Modules
 Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
 Install-Module Pode -Force
-Install-Module -Name Pester -Force -SkipPublisherCheck
-Install-Module Az -Scope AllUsers -Force
+
+# Install Later Modules in Background to speed launch time
+Start-Job -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
+Start-Job -ScriptBlock { Install-Module Az -Scope AllUsers -Force }
 
 # Create tests directory
 if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
