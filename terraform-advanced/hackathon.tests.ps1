@@ -1,10 +1,77 @@
 # Pester test script
-Describe " Install Software and VS Code Extensions" -Tags 0 {
-    It "Should have Azure CLI installed" {
-        $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
-        Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-        Update-SessionEnvironment
-        $azpath = Get-Command az -ErrorAction SilentlyContinue
-        $azpath | Should -Not -BeNullOrEmpty
+Describe "Import Resources and Generate Configuration" -Tags 0 {
+    It "State should exist locally" {
+        $State = Get-Item -Path "C:\Terraform\terraform.tfstate"
+        $State | Should -Not -BeNullOrEmpty
+    }
+    It "Managed Resource Group is present in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_resource_group" -and $_.mode -eq "managed" }
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "Managed Storage Account is present in state" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResource = $State.resources | Where-Object { $_.type -eq "azurerm_storage_account" -and $_.mode -eq "managed" }
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "Storage Account replication type is LRS" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "LRS"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" }).instances[0].attributes.account_replication_type
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "Storage Account tier type is Standard" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "Standard"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" }).instances[0].attributes.account_tier
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "Storage Account network_rules Default Action is Deny" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "Deny"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" }).instances[0].attributes.network_rules.default_action
+        $ActualValue | Should -Be $RequiredValue
+    }
+}
+
+Describe "Resolve Provider Issues" -Tags 1 {
+    It "Storage Account network_rules Default Action is Deny" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "Deny"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" }).instances[0].attributes.network_rules.default_action
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "State contains required resources" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $StateObjectCount = $State.Resources.Count
+        $StateObjectCount | Should -BeGreaterOrEqual 3
+    }
+    It "State contains thumbnails resource" {
+        Connect-AzAccount -Identity
+        $RequiredString = Select-String -Pattern "thumbnails" -SimpleMatch -Path "C:\Terraform\terraform.tfstate"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+}
+
+Describe "Import Resources and Generate Configuration" -Tags 2 {
+    It "C:\Terraform\modules exists" {
+        $RequiredItem = Get-Item -Path "C:\Terraform\modules"
+        $RequiredItem | Should -Not -BeNullOrEmpty
+    }
+    It "C:\Terraform\modules\terraform-azure-storage-account exists" {
+        $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account"
+        $RequiredItem | Should -Not -BeNullOrEmpty
+    }
+    It "C:\Terraform\modules\terraform-azure-storage-account\main.tf exists" {
+        $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account\main.tf"
+        $RequiredItem | Should -Not -BeNullOrEmpty
+    }
+    It "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf exists" {
+        $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf"
+        $RequiredItem | Should -Not -BeNullOrEmpty
+    }
+    It "C:\Terraform\modules\terraform-azure-storage-account\variables.tf exists" {
+        $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account\variables.tf"
+        $RequiredItem | Should -Not -BeNullOrEmpty
     }
 }

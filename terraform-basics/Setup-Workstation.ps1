@@ -23,13 +23,11 @@ Start-Job -ScriptBlock { choco install vscode -y }
 ## nssm for hosting Pode as a service
 choco install nssm -y
 
-# Install Minimum Modules
+# Install Modules
 Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
 Install-Module Pode -Force
-
-# Install Later Modules in Background to speed launch time
-Start-Job -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
-Start-Job -ScriptBlock { Install-Module Az -Scope AllUsers -Force }
+Install-Module -Name Pester -Force -SkipPublisherCheck
+Install-Module Az -Scope AllUsers -Force
 
 # Create tests directory
 if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
