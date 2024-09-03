@@ -54,24 +54,44 @@ Describe "Resolve Provider Issues" -Tags 1 {
 }
 
 Describe "Import Resources and Generate Configuration" -Tags 2 {
-    It "C:\Terraform\modules exists" {
+    It "modules exists" {
         $RequiredItem = Get-Item -Path "C:\Terraform\modules"
         $RequiredItem | Should -Not -BeNullOrEmpty
     }
-    It "C:\Terraform\modules\terraform-azure-storage-account exists" {
+    It "terraform-azure-storage-account exists" {
         $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account"
         $RequiredItem | Should -Not -BeNullOrEmpty
     }
-    It "C:\Terraform\modules\terraform-azure-storage-account\main.tf exists" {
+    It "main.tf exists" {
         $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account\main.tf"
         $RequiredItem | Should -Not -BeNullOrEmpty
     }
-    It "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf exists" {
+    It "outputs.tf exists" {
         $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf"
         $RequiredItem | Should -Not -BeNullOrEmpty
     }
-    It "C:\Terraform\modules\terraform-azure-storage-account\variables.tf exists" {
+    It "variables.tf exists" {
         $RequiredItem = Get-Item -Path "C:\Terraform\modules\terraform-azure-storage-account\variables.tf"
         $RequiredItem | Should -Not -BeNullOrEmpty
+    }
+    It "Output is defined in Module outputs.tf" {
+        $RequiredString = Select-String -Pattern "output" -SimpleMatch -Path "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "resource_id is defined in Module outputs.tf" {
+        $RequiredString = Select-String -Pattern "resource_id" -SimpleMatch -Path "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "Module is consumed in main.tf" {
+        $RequiredString = Select-String -Pattern "module" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "azurerm_storage_account is defined in module main.tf" {
+        $RequiredString = Select-String -Pattern "azurerm_storage_account" -SimpleMatch -Path "C:\Terraform\modules\terraform-azure-storage-account\main.tf"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "azurerm_storage_account should NOT be defined in top level main.tf" {
+        $RequiredString = Select-String -Pattern "azurerm_storage_account" -SimpleMatch -Path "C:\Terraform\main.tf"
+        $RequiredString | Should -BeNullOrEmpty
     }
 }
