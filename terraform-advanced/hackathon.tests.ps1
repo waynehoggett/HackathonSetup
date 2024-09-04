@@ -94,4 +94,21 @@ Describe "Import Resources and Generate Configuration" -Tags 2 {
         $RequiredString = Select-String -Pattern "azurerm_storage_account" -SimpleMatch -Path "C:\Terraform\main.tf"
         $RequiredString | Should -BeNullOrEmpty
     }
+    It "tf.plan should contain No changes." {
+        $RequiredString = Select-String -Pattern "No changes." -SimpleMatch -Path "C:\Terraform\tf3.plan"
+        $RequiredString | Should -BeNullOrEmpty
+    }
+}
+
+Describe "Create Multiple Resources" -Tags 3 {
+    It "Managed Storage Account Count is 4 in State" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredResourceCount = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" -and $_.mode -eq "managed" }).Count
+        $RequiredResourceCount | Should -Be 4
+    }
+    It "tf.plan should contain 1 change." {
+        $RequiredString = Select-String -Pattern "TODO" -SimpleMatch -Path "C:\Terraform\tf3.plan"
+        $RequiredString | Should -BeNullOrEmpty
+    }
+
 }
