@@ -76,6 +76,7 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
         name: 'osdisk-${vmName}'
         caching: 'ReadWrite'
         createOption: 'FromImage'
+        writeAcceleratorEnabled: true
       }
     }
     networkProfile: {
