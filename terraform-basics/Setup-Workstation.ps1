@@ -38,7 +38,7 @@ if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
 ## Terraform basic hackathon tests
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/hackathon.tests.ps1' -OutFile 'C:\Tests\hackathon.tests.ps1' -UseBasicParsing
 ## Pode Server file
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/Server.ps1' -OutFile 'C:\Tests\Server.ps1' -UseBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-shared/Server.ps1' -OutFile 'C:\Tests\Server.ps1' -UseBasicParsing
 
 # Enable Access using Windows Firewall
 New-NetFirewallRule -DisplayName "AllowPodeWebServer" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
