@@ -19,8 +19,6 @@ refreshenv
 
 # Install Software using Chocolatey
 Start-Job -ScriptBlock { choco install vscode -y }
-Start-Job -ScriptBlock { choco install terraform --version=1.9.5 -y }
-Start-Job -ScriptBlock { choco install azure-cli --version=2.62.0 -y }
 ## nssm for hosting Pode as a service
 Start-Job -ScriptBlock { choco install nssm -y }
 
@@ -28,7 +26,7 @@ Start-Job -ScriptBlock { choco install nssm -y }
 Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
 Start-Job -ScriptBlock { Install-Module Pode -Force }
 Start-Job -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
-Start-Job -ScriptBlock { Install-Module Az -Scope AllUsers -Force }
+Start-Job -ScriptBlock { Install-Module Az.Accounts, Az.Storage -Scope AllUsers -Force }
 
 # Wait for previous Jobs to complete
 Get-Job | Wait-Job
