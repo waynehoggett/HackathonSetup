@@ -10,9 +10,6 @@ New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Curr
 # Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-
-
-
 # Load the Chocolatey Module
 $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
@@ -21,8 +18,9 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 refreshenv
 
 # Install Software using Chocolatey
-## vscode for the hackathon, in the background to save launch time
 Start-Job -ScriptBlock { choco install vscode -y }
+Start-Job -ScriptBlock { choco install terraform --version=1.9.5 -y }
+Start-Job -ScriptBlock { choco install azure-cli --version=2.62.0 -y }
 ## nssm for hosting Pode as a service
 Start-Job -ScriptBlock { choco install nssm -y }
 
