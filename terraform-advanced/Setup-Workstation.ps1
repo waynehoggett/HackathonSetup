@@ -28,7 +28,6 @@ Start-Job -ScriptBlock { choco install nssm -y }
 Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
 Start-Job -ScriptBlock { Install-Module Pode -Force }
 Start-Job -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
-Start-Job -ScriptBlock { Install-Module Az -Scope AllUsers -Force }
 
 # Wait for previous Jobs to complete
 Get-Job | Wait-Job
