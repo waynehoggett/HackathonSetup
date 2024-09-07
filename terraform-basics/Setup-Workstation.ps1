@@ -10,6 +10,9 @@ New-ItemProperty -Path "HKLM:\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\Curr
 # Install Chocolatey
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
+
+
+
 # Load the Chocolatey Module
 $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
@@ -21,13 +24,16 @@ refreshenv
 ## vscode for the hackathon, in the background to save launch time
 Start-Job -ScriptBlock { choco install vscode -y }
 ## nssm for hosting Pode as a service
-choco install nssm -y
+Start-Job -ScriptBlock { choco install nssm -y }
 
 # Install Modules
 Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
-Install-Module Pode -Force
-Install-Module -Name Pester -Force -SkipPublisherCheck
-Install-Module Az -Scope AllUsers -Force
+Start-Job -ScriptBlock { Install-Module Pode -Force }
+Start-Job -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
+Start-Job -ScriptBlock { Install-Module Az -Scope AllUsers -Force }
+
+# Wait for previous Jobs to complete
+Get-Job | Wait-Job
 
 # Create tests directory
 if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
