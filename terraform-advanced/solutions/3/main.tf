@@ -11,6 +11,10 @@ terraform {
   }
 }
 
+provider "azapi" {
+
+}
+
 provider "azurerm" {
   subscription_id                 = "847cb8f3-802b-42ab-aa9b-fe9d17d25580"
   resource_provider_registrations = "none"
@@ -18,44 +22,25 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = ""
-  location = ""
+  name     = "rg-stg-d0afad46-398c-4aad-a7be-71e237fd5fca"
+  location = "australiaeast"
 }
 
-#--- Remove this code
-resource "azurerm_storage_account" "stg" {
-  name                            = ""
-  resource_group_name             = azurerm_resource_group.rg.name
-  location                        = azurerm_resource_group.rg.location
-  account_tier                    = "Standard"
-  account_replication_type        = "LRS"
-  min_tls_version                 = "TLS1_0"
-  allow_nested_items_to_be_public = "false"
-  network_rules {
-    default_action = "Deny"
-    ip_rules       = []
-  }
+
+module "stg" {
+  source               = "./modules/terraform-azure-storage-account"
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
+  storage_account_name = "stbbfhmoafv2z32"
 }
-#--- To here
 
 
 resource "azapi_resource" "container" {
   type      = "Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01"
   name      = "thumbnails"
-  parent_id = "${azurerm_storage_account.stg.id}/blobServices/default"
+  parent_id = "${module.stg.resource_id}/blobServices/default"
   body = jsonencode({
     properties = {
     }
   })
 }
-
-#----- Add below code, and add the modules folder
-module "stg" {
-  source               = "./modules/terraform-azure-storage-account"
-  resource_group_name  = data.azurerm_resource_group.rg.name
-  location             = data.azurerm_resource_group.rg.location
-  storage_account_name = ""
-}
-#-----
-
-

@@ -4,13 +4,15 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "4.0.1"
     }
-
     azapi = {
       source  = "Azure/azapi"
       version = "1.15.0"
     }
-
   }
+}
+
+provider "azapi" {
+
 }
 
 provider "azurerm" {
@@ -19,57 +21,33 @@ provider "azurerm" {
   features {}
 }
 
-provider "azapi" {
-
+resource "azurerm_resource_group" "rg" {
+  name     = "rg-stg-d0afad46-398c-4aad-a7be-71e237fd5fca"
+  location = "australiaeast"
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = ""
-  location = ""
+module "stg" {
+  source               = "./modules/terraform-azure-storage-account"
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
+  storage_account_name = "stbbfhmoafv2z32"
+}
+
+module "multiplestg" {
+  for_each             = toset([1, 3])
+  source               = "./modules/terraform-azure-storage-account"
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
+  storage_account_name = "stbbfhmoafv2z32${each.key}"
 }
 
 
 resource "azapi_resource" "container" {
   type      = "Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01"
   name      = "thumbnails"
-  parent_id = "${azurerm_storage_account.stg.id}/blobServices/default"
+  parent_id = "${module.stg.resource_id}/blobServices/default"
   body = jsonencode({
     properties = {
     }
   })
 }
-
-module "stg" {
-  source               = "./modules/terraform-azure-storage-account"
-  resource_group_name  = data.azurerm_resource_group.rg.name
-  location             = data.azurerm_resource_group.rg.location
-  storage_account_name = ""
-}
-
-#-----Remove this code
-module "stg1" {
-  count = 3
-
-  source               = "./modules/terraform-azure-storage-account"
-  resource_group_name  = azurerm_resource_group.rg.name
-  location             = azurerm_resource_group.rg.location
-  storage_account_name = "st7jralg5kub6sa${count.index + 1}"
-}
-#-----
-
-
-#----- Add below code
-module "stg1" {
-  #count = 3
-  for_each = tomap({
-    one   = 1
-    three = 2
-  })
-
-
-  source               = "./modules/terraform-azure-storage-account"
-  resource_group_name  = azurerm_resource_group.rg.name
-  location             = azurerm_resource_group.rg.location
-  storage_account_name = "st7jralg5kub6sa${each.value + 1}"
-}
-#-----

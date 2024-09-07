@@ -1,0 +1,2 @@
+terraform state mv 'module.stg[0].azurerm_storage_account.stg' 'module.stg[\"1\"].azurerm_storage_account.stg'
+terraform state mv 'module.stg[2].azurerm_storage_account.stg' 'module.stg[\"3\"].azurerm_storage_account.stg'

@@ -14,22 +14,22 @@ provider "azurerm" {
 }
 
 import {
-  id = ""
+  id = "%RG_ID%"
   to = azurerm_resource_group.rg
 }
 
 import {
-  id = ""
+  id = "%STG_ID%"
   to = azurerm_storage_account.stg
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = ""
-  location = ""
+  name     = "%RG_NAME%"
+  location = "%RG_LOCATION%"
 }
 
 resource "azurerm_storage_account" "stg" {
-  name                            = ""
+  name                            = "%STG_NAME%"
   resource_group_name             = azurerm_resource_group.rg.name
   location                        = azurerm_resource_group.rg.location
   account_tier                    = "Standard"

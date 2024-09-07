@@ -47,7 +47,6 @@ Describe "Resolve Provider Issues" -Tags 1 {
         $StateObjectCount | Should -BeGreaterOrEqual 3
     }
     It "State contains thumbnails resource" {
-        Connect-AzAccount -Identity
         $RequiredString = Select-String -Pattern "thumbnails" -SimpleMatch -Path "C:\Terraform\terraform.tfstate"
         $RequiredString | Should -Not -BeNullOrEmpty
     }
@@ -94,9 +93,9 @@ Describe "Import Resources and Generate Configuration" -Tags 2 {
         $RequiredString = Select-String -Pattern "azurerm_storage_account" -SimpleMatch -Path "C:\Terraform\main.tf"
         $RequiredString | Should -BeNullOrEmpty
     }
-    It "tf.plan should contain No changes." {
-        $RequiredString = Select-String -Pattern "No changes." -SimpleMatch -Path "C:\Terraform\tf3.plan"
-        $RequiredString | Should -BeNullOrEmpty
+    It "tf3.plan should contain No changes." {
+        $RequiredString = Select-String -Pattern "No changes" -SimpleMatch -Path "C:\Terraform\tf3.plan"
+        $RequiredString | Should -Not -BeNullOrEmpty
     }
 }
 
@@ -106,9 +105,57 @@ Describe "Create Multiple Resources" -Tags 3 {
         $RequiredResourceCount = ($State.resources | Where-Object { $_.type -eq "azurerm_storage_account" -and $_.mode -eq "managed" }).Count
         $RequiredResourceCount | Should -Be 4
     }
-    It "tf.plan should contain 1 change." {
-        $RequiredString = Select-String -Pattern "TODO" -SimpleMatch -Path "C:\Terraform\tf3.plan"
-        $RequiredString | Should -BeNullOrEmpty
+    It "State contains a resource that ends with a 1" {
+        $RequiredString = Select-String -Pattern '"name": "\w*1"' -Path "C:\Terraform\terraform.tfstate"
+        $RequiredString | Should -Not -BeNullOrEmpty
     }
+    It "State contains a resource that ends with a 2" {
+        $RequiredString = Select-String -Pattern '"name": "\w*2"' -Path "C:\Terraform\terraform.tfstate"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    It "State contains a resource that ends with a 3" {
+        $RequiredString = Select-String -Pattern '"name": "\w*3"' -Path "C:\Terraform\terraform.tfstate"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+    
+}
 
+Describe "Create Multiple Resources" -Tags 4 {
+    It "tf4.plan should contain Plan: 0 to add, 0 to change, 1 to destroy." {
+        $RequiredString = Select-String -Pattern "Plan: 0 to add, 0 to change, 1 to destroy." -SimpleMatch -Path "C:\Terraform\tf4.plan"
+        $RequiredString | Should -Not -BeNullOrEmpty
+    }
+}
+
+Describe "Create Multiple Resources" -Tags 5 {
+    It "SQL Database Collation is SQL_Latin1_General_CP1_CI_AS" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "SQL_Latin1_General_CP1_CI_AS"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_mssql_database" }).instances[0].attributes.collation
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "SQL Database sku_name is S0" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "S0"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_mssql_database" }).instances[0].attributes.sku_name
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "SQL Database max_size_gb is 2" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $RequiredValue = "2"
+        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_mssql_database" }).instances[0].attributes.max_size_gb
+        $ActualValue | Should -Be $RequiredValue
+    }
+    It "All resources and resource groups are tagged" {
+        $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
+        $ValidTags = $true
+        foreach ($Resource in $State.resources) {
+            foreach ($Instance in $Resource.instances) {
+                if ($Instance.attributes.tags.environment -ne "prod" -or $Instance.attributes.tags.source -ne "terraform") {
+                    $ValidTags = $false
+                }
+            }
+        }
+        $ValidTags | Should -Be $true
+    }
 }
