@@ -113,10 +113,17 @@ Describe "Deploy a Virtual Network" -Tags 5 {
         $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.address_space
         $ActualValue | Should -Be $RequiredValue
     }
-    It "First Virtual Network subnet address space is 10.0.0.0/24 in state" {
+    It "Subnet address space is 10.0.0.0/24 in state" {
         $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
         $RequiredValue = "10.0.0.0/24"
-        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+        try {
+            $VnetValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+            $ActualValue = $VnetValue
+        }
+        catch {
+            $SubnetValue = ($State.resources | Where-Object { $_.type -eq "azurerm_subnet" }).instances.attributes.address_prefixes[0]
+            $ActualValue = $SubnetValue
+        }
         $ActualValue | Should -Be $RequiredValue
     }
     It "Managed Virtual Network is present in state" {
@@ -138,10 +145,17 @@ Describe "Update Resources" -Tags 6 {
         $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.address_space
         $ActualValue | Should -Be $RequiredValue
     }
-    It "First Virtual Network subnet address space is 10.1.0.0/24 in state" {
+    It "Subnet address space is 10.1.0.0/24 in state" {
         $State = Get-Content -Path "C:\Terraform\terraform.tfstate" | ConvertFrom-Json
         $RequiredValue = "10.1.0.0/24"
-        $ActualValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+        try {
+            $VnetValue = ($State.resources | Where-Object { $_.type -eq "azurerm_virtual_network" }).instances.attributes.subnet[0].address_prefixes[0]
+            $ActualValue = $VnetValue
+        }
+        catch {
+            $SubnetValue = ($State.resources | Where-Object { $_.type -eq "azurerm_subnet" }).instances.attributes.address_prefixes[0]
+            $ActualValue = $SubnetValue
+        }
         $ActualValue | Should -Be $RequiredValue
     }
     It "Managed Virtual Network is present in state" {
