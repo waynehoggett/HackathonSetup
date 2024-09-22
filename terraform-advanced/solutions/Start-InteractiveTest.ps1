@@ -207,3 +207,11 @@ $SQL_RG_ID = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*sql*" 
 
 $SQL_RG_LOCATION = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*sql*" | Select-Object -ExpandProperty "Location"
 (Get-Content "C:\Terraform\main.tf").Replace('%SQL_RG_LOCATION%', "$($SQL_RG_LOCATION)") | Set-Content "C:\Terraform\main.tf"
+
+New-Item "C:\Terraform\modules\terraform-azure-storage-account" -ItemType Directory -Force
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/3/terraform-azure-storage-account/main.tf' -OutFile "C:\Terraform\modules\terraform-azure-storage-account\main.tf" -UseBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/3/terraform-azure-storage-account/outputs.tf' -OutFile "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf" -UseBasicParsing
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/3/terraform-azure-storage-account/variables.tf' -OutFile "C:\Terraform\modules\terraform-azure-storage-account\variables.tf" -UseBasicParsing
+
+terraform init
+terraform plan
