@@ -52,7 +52,7 @@ terraform validate
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 6
-Write-Host "Starting Challenge 5"
+Write-Host "Starting Challenge 6"
 
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/solutions/6/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
 $RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | Select-Object -ExpandProperty "ResourceGroupName"
