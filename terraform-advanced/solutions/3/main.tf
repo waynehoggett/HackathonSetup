@@ -22,8 +22,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "rg-stg-d0afad46-398c-4aad-a7be-71e237fd5fca"
-  location = "australiaeast"
+  name     = "%RG_NAME%"
+  location = "%RG_LOCATION%"
 }
 
 
@@ -31,7 +31,7 @@ module "stg" {
   source               = "./modules/terraform-azure-storage-account"
   resource_group_name  = azurerm_resource_group.rg.name
   location             = azurerm_resource_group.rg.location
-  storage_account_name = "stbbfhmoafv2z32"
+  storage_account_name = "%STG_NAME%"
 }
 
 
