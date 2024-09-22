@@ -69,7 +69,7 @@ resource "random_string" "sqlname" {
 }
 
 resource "azurerm_mssql_server" "sqlsvr" {
-  name                         = "sqlservera"
+  name                         = "sqlserver${random_string.stgname.result}"
   resource_group_name          = data.azurerm_resource_group.sqlrg.name
   location                     = data.azurerm_resource_group.sqlrg.location
   version                      = "12.0"
