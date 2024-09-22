@@ -1,5 +1,16 @@
 terraform {
   required_version = "~> 1.9.4"
+
+  backend "azurerm" {
+    resource_group_name  = "StorageAccount-ResourceGroup"
+    storage_account_name = "abcd1234"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+    use_msi              = true
+    subscription_id      = "847cb8f3-802b-42ab-aa9b-fe9d17d25580"
+    tenant_id            = "8940c948-d605-4e9a-b426-91153d1275f9"
+  }
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
