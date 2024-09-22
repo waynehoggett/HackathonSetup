@@ -2,9 +2,21 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "4.1.0"
+      version = "4.0.1"
+    }
+    azapi = {
+      source  = "Azure/azapi"
+      version = "1.15.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.6.3"
     }
   }
+}
+
+provider "azapi" {
+
 }
 
 provider "azurerm" {
@@ -13,14 +25,53 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_resource_group" "rg" {
-  name = "rg-sql-a906e245-9669-407b-9263-71125c6284f3"
+provider "random" {
+}
+
+resource "azurerm_resource_group" "rg" {
+  name     = "%RG_NAME%"
+  location = "%RG_LOCATION%"
+}
+
+module "stg" {
+  source               = "./modules/terraform-azure-storage-account"
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
+  storage_account_name = "%STG_NAME%"
+}
+
+module "multiplestg" {
+  for_each             = toset(["1", "3"])
+  source               = "./modules/terraform-azure-storage-account"
+  resource_group_name  = azurerm_resource_group.rg.name
+  location             = azurerm_resource_group.rg.location
+  storage_account_name = "%STG_NAME%${each.key}"
+}
+
+resource "azapi_resource" "container" {
+  type      = "Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01"
+  name      = "thumbnails"
+  parent_id = "${module.stg.resource_id}/blobServices/default"
+  body = jsonencode({
+    properties = {
+    }
+  })
+}
+
+data "azurerm_resource_group" "sqlrg" {
+  name = "%SQL_RG_NAME%"
+}
+
+resource "random_string" "sqlname" {
+  length      = 7
+  min_lower   = 4
+  min_numeric = 3
 }
 
 resource "azurerm_mssql_server" "sqlsvr" {
-  name                         = "sqlservera906e245"
-  resource_group_name          = data.azurerm_resource_group.rg.name
-  location                     = data.azurerm_resource_group.rg.location
+  name                         = "sqlservera"
+  resource_group_name          = data.azurerm_resource_group.sqlrg.name
+  location                     = data.azurerm_resource_group.sqlrg.location
   version                      = "12.0"
   administrator_login          = "4dm1n157r470r"
   administrator_login_password = "4-v3ry-53cr37-p455w0rd"

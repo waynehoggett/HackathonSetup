@@ -35,7 +35,7 @@ module "stg" {
 }
 
 module "multiplestg" {
-  for_each             = toset([1, 3])
+  for_each             = toset(["1", "3"])
   source               = "./modules/terraform-azure-storage-account"
   resource_group_name  = azurerm_resource_group.rg.name
   location             = azurerm_resource_group.rg.location
