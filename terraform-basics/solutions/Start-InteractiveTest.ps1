@@ -20,7 +20,7 @@ Read-Host -Prompt "Verify and Continue and then Press Enter"
 # 3
 Write-Host "Starting Challenge 3"
 
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/terraform-basics/solutions/2/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/terraform-basics/solutions/3/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
 
 terraform init
 
