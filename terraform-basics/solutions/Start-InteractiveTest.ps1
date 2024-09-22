@@ -71,3 +71,5 @@ terraform validate
 terraform init
 terraform plan
 terraform apply --auto-approve
+
+Read-Host -Prompt "Verify and Continue and then Press Enter"
