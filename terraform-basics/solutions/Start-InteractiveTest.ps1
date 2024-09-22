@@ -130,7 +130,6 @@ $RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | 
 $STG_NAME = Get-AzStorageAccount | Select-Object -ExpandProperty "StorageAccountName"
 (Get-Content "C:\Terraform\main.tf").Replace('%STG_NAME%', "$($STG_NAME)") | Set-Content "C:\Terraform\main.tf"
 
-
 az login --identity
 terraform fmt
 terraform init
