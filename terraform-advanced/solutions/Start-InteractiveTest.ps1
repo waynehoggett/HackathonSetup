@@ -215,3 +215,4 @@ Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/Hackathon
 
 terraform init
 terraform plan
+terraform apply --auto-approve

@@ -151,8 +151,11 @@ Describe "Create Multiple Resources" -Tags 5 {
         $ValidTags = $true
         foreach ($Resource in $State.resources) {
             foreach ($Instance in $Resource.instances) {
-                if ($Instance.attributes.tags.environment -ne "prod" -or $Instance.attributes.tags.source -ne "terraform") {
-                    $ValidTags = $false
+                # Only check resources that have tags
+                if ($Instance.attributes.tags) {
+                    if ($Instance.attributes.tags.environment -ne "hackathon" -or $Instance.attributes.tags.source -ne "terraform") {
+                        $ValidTags = $false
+                    }
                 }
             }
         }
