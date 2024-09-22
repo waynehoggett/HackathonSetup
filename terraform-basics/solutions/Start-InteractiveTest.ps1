@@ -132,9 +132,9 @@ $STG_NAME = Get-AzStorageAccount | Select-Object -ExpandProperty "StorageAccount
 
 az login --identity
 terraform fmt
-terraform init
-terraform validate
-terraform plan
-terraform apply --auto-approve
+terraform init -force-copy
+
+Remove-Item -Path "C:\Terraform\terraform.tfstate" -Force
+Remove-Item -Path "C:\Terraform\terraform.tfstate.backup" -Force
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"

@@ -4,12 +4,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "4.0.1"
     }
-    # --- Add this required provider
     azapi = {
       source  = "Azure/azapi"
       version = "1.15.0"
     }
-    # --- Add this required provider
   }
 }
 
@@ -18,28 +16,17 @@ provider "azurerm" {
   resource_provider_registrations = "none"
   features {}
 }
-# --- Add this provider config
+
 provider "azapi" {
-
-}
-# --- 
-import {
-  id = ""
-  to = azurerm_resource_group.rg
-}
-
-import {
-  id = ""
-  to = azurerm_storage_account.stg
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = ""
-  location = ""
+  name     = "%RG_NAME%"
+  location = "%RG_LOCATION%"
 }
 
 resource "azurerm_storage_account" "stg" {
-  name                            = ""
+  name                            = "%STG_NAME%"
   resource_group_name             = azurerm_resource_group.rg.name
   location                        = azurerm_resource_group.rg.location
   account_tier                    = "Standard"
@@ -52,7 +39,7 @@ resource "azurerm_storage_account" "stg" {
   }
 }
 
-#----- Add below code
+
 resource "azapi_resource" "container" {
   type      = "Microsoft.Storage/storageAccounts/blobServices/containers@2022-09-01"
   name      = "thumbnails"
@@ -62,4 +49,4 @@ resource "azapi_resource" "container" {
     }
   })
 }
-#-----
+
