@@ -3,9 +3,9 @@ terraform {
 
   backend "azurerm" {
     resource_group_name  = "StorageAccount-ResourceGroup"
-    storage_account_name = "abcd1234"
+    storage_account_name = "%STG_NAME%"
     container_name       = "tfstate"
-    key                  = "prod.terraform.tfstate"
+    key                  = "terraform.tfstate"
     use_msi              = true
     subscription_id      = "847cb8f3-802b-42ab-aa9b-fe9d17d25580"
     tenant_id            = "8940c948-d605-4e9a-b426-91153d1275f9"

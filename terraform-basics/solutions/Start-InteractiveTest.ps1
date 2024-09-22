@@ -123,8 +123,13 @@ terraform apply --auto-approve
 Read-Host -Prompt "To Continue Press Enter (Partial completion)"
 
 Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/solutions/9/main-part2.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
+
 $RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | Select-Object -ExpandProperty "ResourceGroupName"
 (Get-Content "C:\Terraform\main.tf").Replace('%RG_NAME%', "$($RG_NAME)") | Set-Content "C:\Terraform\main.tf"
+
+$STG_NAME = Get-AzStorageAccount | Select-Object -ExpandProperty "StorageAccountName"
+(Get-Content "C:\Terraform\main.tf").Replace('%STG_NAME%', "$($STG_NAME)") | Set-Content "C:\Terraform\main.tf"
+
 
 az login --identity
 terraform fmt
