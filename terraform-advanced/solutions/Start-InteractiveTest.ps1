@@ -148,7 +148,7 @@ terraform plan -no-color > tf4.plan
 # 6
 Write-Host "Starting Challenge 6"
 
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/5/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/6/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
 
 $RG_ID = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*stg*" | Select-Object -ExpandProperty "ResourceId"
 (Get-Content "C:\Terraform\main.tf").Replace('%RG_ID%', "$($RG_ID)") | Set-Content "C:\Terraform\main.tf"
@@ -167,3 +167,5 @@ $STG_NAME = Get-AzStorageAccount | Select-Object -ExpandProperty "StorageAccount
 
 $SQL_RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*sql*" | Select-Object -ExpandProperty "ResourceGroupName"
 (Get-Content "C:\Terraform\main.tf").Replace('%SQL_RG_NAME%', "$($SQL_RG_NAME)") | Set-Content "C:\Terraform\main.tf"
+
+terraform init
