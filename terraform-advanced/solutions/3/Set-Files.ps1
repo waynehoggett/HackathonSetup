@@ -1,6 +1,6 @@
 
 # Download the Module
-New-Item "C:\Terraform\modules\terraform-azure-storage-account" -ItemType Directory
+New-Item "C:\Terraform\modules\terraform-azure-storage-account" -ItemType Directory -Force
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/3/terraform-azure-storage-account/main.tf' -OutFile "C:\Terraform\modules\terraform-azure-storage-account\main.tf" -UseBasicParsing
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/3/terraform-azure-storage-account/outputs.tf' -OutFile "C:\Terraform\modules\terraform-azure-storage-account\outputs.tf" -UseBasicParsing
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-advanced/solutions/3/terraform-azure-storage-account/variables.tf' -OutFile "C:\Terraform\modules\terraform-azure-storage-account\variables.tf" -UseBasicParsing
