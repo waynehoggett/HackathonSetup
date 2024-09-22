@@ -15,5 +15,5 @@ provider "azurerm" {
 }
 
 data "azurerm_resource_group" "rg" {
-  name = "rg-lab-9f06225a-1adc-4787-9411-296b18239e60"
+  name = "%RG_NAME%"
 }
