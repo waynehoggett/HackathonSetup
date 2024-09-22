@@ -92,8 +92,8 @@ resource "random_string" "sqlname" {
 
 resource "azurerm_mssql_server" "sqlsvr" {
   name                         = "sqlserver${random_string.sqlname.result}"
-  resource_group_name          = data.azurerm_resource_group.sqlrg.name
-  location                     = data.azurerm_resource_group.sqlrg.location
+  resource_group_name          = azurerm_resource_group.sqlrg.name
+  location                     = azurerm_resource_group.sqlrg.location
   version                      = "12.0"
   administrator_login          = "4dm1n157r470r"
   administrator_login_password = "4-v3ry-53cr37-p455w0rd"
