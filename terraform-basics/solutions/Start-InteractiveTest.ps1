@@ -73,3 +73,19 @@ terraform plan
 terraform apply --auto-approve
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"
+
+# 7
+Write-Host "Starting Challenge 7"
+
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/solutions/7/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
+$RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | Select-Object -ExpandProperty "ResourceGroupName"
+(Get-Content "C:\Terraform\main.tf").Replace('%RG_NAME%', "$($RG_NAME)") | Set-Content "C:\Terraform\main.tf"
+
+az login --identity
+terraform fmt
+terraform validate
+terraform init
+terraform plan
+terraform apply --auto-approve
+
+Read-Host -Prompt "Verify and Continue and then Press Enter"
