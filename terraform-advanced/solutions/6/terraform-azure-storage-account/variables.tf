@@ -11,5 +11,5 @@ variable "location" {
 }
 
 variable "tags" {
-  type = map()
+  type = map(string)
 }
