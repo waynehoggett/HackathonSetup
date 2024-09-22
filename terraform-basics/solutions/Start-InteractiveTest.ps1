@@ -83,8 +83,8 @@ $RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | 
 
 az login --identity
 terraform fmt
-terraform validate
 terraform init
+terraform validate
 terraform plan
 terraform apply --auto-approve
 
@@ -99,9 +99,18 @@ $RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | 
 
 az login --identity
 terraform fmt
-terraform validate
 terraform init
+terraform validate
 terraform plan
 terraform apply --auto-approve
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"
+
+# 9
+Write-Host "Starting Challenge 9"
+
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/terraform-basics/solutions/9/main.tf" -OutFile "C:\Terraform\main.tf" -UseBasicParsing
+$RG_NAME = Get-AzResourceGroup | Where-Object ResourceGroupName -like "*lab*" | Select-Object -ExpandProperty "ResourceGroupName"
+(Get-Content "C:\Terraform\main.tf").Replace('%RG_NAME%', "$($RG_NAME)") | Set-Content "C:\Terraform\main.tf"
+
+Read-Host -Prompt "To Continue Press Enter (Partial completion)"
