@@ -5,8 +5,8 @@ Describe " Install Software and VS Code Extensions" -Tags 0 {
         Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
         Update-SessionEnvironment
         $azcli = Get-Command az -ErrorAction SilentlyContinue
-        $azpsmodule = Get-Module Az -ListAvailable 
-        $azcli -or $azpsmodule | Should -Not -BeNullOrEmpty
+        $azpsmodule = Get-Module Az -ListAvailable
+        ($azcli -or $azpsmodule) | Should -Not -BeNullOrEmpty
     }
     It "Should have the Bicep CLI Installed" {
         $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
