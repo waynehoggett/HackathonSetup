@@ -99,14 +99,14 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
     }
     It "A Storage Account with the SKU Standard_LRS should exist" {
         $StorageAccount = Get-AzStorageAccount
-        $StorageAccount | Where-Object SkuName -eq "Standard_LRS" | Should -Not -BeNullOrEmpty
+        ($StorageAccount | Select-Object -ExpandProperty Sku).Name | Where-Object {$_ -eq "Standard_LRS"} | Should -Not -BeNullOrEmpty
     }
     It "A Storage Account with the SKU Standard_GRS should exist" {
         $StorageAccount = Get-AzStorageAccount
-        $StorageAccount | Where-Object SkuName -eq "Standard_GRS" | Should -Not -BeNullOrEmpty
+        ($StorageAccount | Select-Object -ExpandProperty Sku).Name | Where-Object {$_ -eq "Standard_GRS"} | Should -Not -BeNullOrEmpty
     }
     It "A Storage Account with the SKU Standard_ZRS should exist" {
         $StorageAccount = Get-AzStorageAccount
-        $StorageAccount | Where-Object SkuName -eq "Standard_ZRS" | Should -Not -BeNullOrEmpty
+        ($StorageAccount | Select-Object -ExpandProperty Sku).Name | Where-Object {$_ -eq "Standard_ZRS"} | Should -Not -BeNullOrEmpty
     }
 }
