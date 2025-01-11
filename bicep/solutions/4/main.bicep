@@ -1,11 +1,14 @@
 param name string
-param location string = 'australiaeast'
+param location string = resourceGroup().location
 @allowed([
-  'Standard_LRS'
-  'Standard_GRS'
-  'Standard_RAGRS'
-  'Standard_ZRS'
-  'Premium_LRS'
+'Premium_LRS'
+'Premium_ZRS'
+'Standard_GRS'
+'Standard_GZRS'
+'Standard_LRS'
+'Standard_RAGRS'
+'Standard_RAGZRS'
+'Standard_ZRS'
 ])
 param skuName string = 'Standard_LRS'
 

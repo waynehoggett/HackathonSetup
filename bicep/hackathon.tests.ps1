@@ -69,9 +69,9 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
         $StorageAccountName = $BicepFile | Select-String -Pattern "@maxLength(24)"
         $StorageAccountName | Should -Not -BeNullOrEmpty
     }
-    It "main.bicep should contain resourceGroup().location" {
+    It "main.bicep should contain australiaeast" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
-        $Location = $BicepFile | Select-String -Pattern "resourceGroup().location"
+        $Location = $BicepFile | Select-String -Pattern "australiaeast"
         $Location | Should -Not -BeNullOrEmpty
     }
     It "main.bicep should contain @allowed" {
@@ -88,18 +88,22 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
         $BicepParamFile = Test-Path -Path "C:\Bicep\main.bicepparam"
         $BicepParamFile | Should -Be $True
     }
-    It "main.bicepparam should contain 'Standard_ZRS'" {
+    It "main.bicepparam should contain 'Standard_GRS'" {
         $BicepParamFile = Get-Content -Path "C:\Bicep\main.bicepparam"
-        $Sku = $BicepParamFile | Select-String -Pattern "Standard_ZRS"
+        $Sku = $BicepParamFile | Select-String -Pattern "Standard_GRS"
         $Sku | Should -Not -BeNullOrEmpty
     }
     It "Storage Account count should be 3" {
         $StorageAccount = Get-AzStorageAccount
         ($StorageAccount | Measure-Object).Count | Should -Be 3
     }
-    It "Two Storage Accounts should exist with the SKU Standard_LRS" {
+    It "A Storage Account with the SKU Standard_LRS should exist" {
         $StorageAccount = Get-AzStorageAccount
-        $StorageAccount | Where-Object SkuName -eq "Standard_LRS" | Should -HaveCount 2
+        $StorageAccount | Where-Object SkuName -eq "Standard_LRS" | Should -Not -BeNullOrEmpty
+    }
+    It "A Storage Account with the SKU Standard_GRS should exist" {
+        $StorageAccount = Get-AzStorageAccount
+        $StorageAccount | Where-Object SkuName -eq "Standard_GRS" | Should -Not -BeNullOrEmpty
     }
     It "A Storage Account with the SKU Standard_ZRS should exist" {
         $StorageAccount = Get-AzStorageAccount
