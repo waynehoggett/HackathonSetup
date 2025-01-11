@@ -1,4 +1,7 @@
+@maxLength(24)
+@minLength(3)
 param name string
+
 param location string = 'australiaeast'
 @allowed([
   'Standard_LRS'

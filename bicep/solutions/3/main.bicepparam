@@ -1,4 +1,4 @@
 using './main.bicep'
 
-param name = uniqueString(uniqueString('1'))
+param name = 'st${toLower(uniqueString('1'))}'
 param skuName = 'Standard_ZRS'
