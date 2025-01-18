@@ -61,12 +61,12 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
     }
     It "main.bicep should contain @minLength(3)" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
-        $StorageAccountName = $BicepFile | Select-String -Pattern "@minLength(3)"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "@minLength(3)" -SimpleMatch
         $StorageAccountName | Should -Not -BeNullOrEmpty
     }
     It "main.bicep should contain @maxLength(24)" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
-        $StorageAccountName = $BicepFile | Select-String -Pattern "@maxLength(24)"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "@maxLength(24)" -SimpleMatch
         $StorageAccountName | Should -Not -BeNullOrEmpty
     }
     It "main.bicep should contain australiaeast" {

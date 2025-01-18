@@ -43,3 +43,30 @@ New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Ob
 ## Deploy a third storage account, using parameters in main.bicepparam
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/3/main.bicepparam' -Destination "C:\Bicep\main.bicepparam"
 New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -TemplateParameterFile "C:\Bicep\main.bicepparam"
+
+# 4
+
+
+
+
+# 5
+
+# 6
+
+# 7
+
+# 8
+
+# 9
+
+# 10
+
+# 11
+
+# 12
+
+# 13
+
+# 14
+
+# 15
