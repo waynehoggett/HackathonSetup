@@ -119,6 +119,15 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
     }
 }
 
+# Challenge 4
+
 Describe "Using Expressions" -Tags 3 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
+    It "A deployment with no parameters should have one resource with no changes" {
+        $Results = Get-AzResourceGroupDeploymentWhatIfResult -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep"
+        ($Results.Changes | Where-Object ChangeType -eq "NoChange").Count | Should -Be 1
+    }
 
 }
