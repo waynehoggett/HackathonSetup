@@ -67,25 +67,10 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
         $ParameterCount = ($BicepFile | Select-String -Pattern "param" | Measure-Object).Count
         $ParameterCount | Should -Be 3
     }
-    It "main.bicep should contain @minLength(3)" {
-        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
-        $StorageAccountName = $BicepFile | Select-String -Pattern "@minLength(3)" -SimpleMatch
-        $StorageAccountName | Should -Not -BeNullOrEmpty
-    }
-    It "main.bicep should contain @maxLength(24)" {
-        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
-        $StorageAccountName = $BicepFile | Select-String -Pattern "@maxLength(24)" -SimpleMatch
-        $StorageAccountName | Should -Not -BeNullOrEmpty
-    }
     It "main.bicep should contain australiaeast" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
         $Location = $BicepFile | Select-String -Pattern "australiaeast"
         $Location | Should -Not -BeNullOrEmpty
-    }
-    It "main.bicep should contain @allowed" {
-        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
-        $Allowed = $BicepFile | Select-String -Pattern "@allowed"
-        $Allowed | Should -Not -BeNullOrEmpty
     }
     It "main.bicep should contain = 'Standard_LRS'" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
@@ -154,4 +139,24 @@ Describe "What If and Deployment Modes" -Tags 4 {
         ($StorageAccount | Measure-Object).Count | Should -Be 1
     }
 
+}
+
+# Challenge 6
+
+Describe "Decorating Parameters, and Interpolation" {
+    It "main.bicep should contain @minLength(3)" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "@minLength(3)" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain @maxLength(24)" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "@maxLength(24)" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain @allowed" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $Allowed = $BicepFile | Select-String -Pattern "@allowed"
+        $Allowed | Should -Not -BeNullOrEmpty
+    }
 }

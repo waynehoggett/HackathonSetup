@@ -1,5 +1,15 @@
+@maxLength(24)
+@minLength(3)
 param name string
+
 param location string = 'australiaeast'
+@allowed([
+  'Standard_LRS'
+  'Standard_GRS'
+  'Standard_RAGRS'
+  'Standard_ZRS'
+  'Premium_LRS'
+])
 param skuName string = 'Standard_LRS'
 
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = {
