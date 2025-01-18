@@ -131,3 +131,27 @@ Describe "Using Expressions" -Tags 3 {
     }
 
 }
+
+# Challenge 5
+
+Describe "What If and Deployment Modes" -Tags 4 {
+
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
+    It "C:\Output\whatif1.txt should contain 1 resource with no change" {
+        $WhatIfFile = Get-Content -Path "C:\Output\whatif1.txt"
+        $NoChange = $WhatIfFile | Select-String -Pattern "1 no change"
+        $NoChange | Should -Not -BeNullOrEmpty
+    }
+    It "C:\Output\whatif2.txt should contain resources to delete" {
+        $WhatIfFile = Get-Content -Path "C:\Output\whatif2.txt"
+        $NoChange = $WhatIfFile | Select-String -Pattern "to delete"
+        $NoChange | Should -Not -BeNullOrEmpty
+    }
+    It "One Storage Account should exist" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Measure-Object).Count | Should -Be 1
+    }
+
+}
