@@ -1,4 +1,7 @@
 # Pester test script
+
+# Challenge 1
+
 Describe " Install Software and VS Code Extensions" -Tags 0 {
     It "Should have Azure CLI or Azure PowerShell installed" {
         $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."   
@@ -24,6 +27,9 @@ Describe " Install Software and VS Code Extensions" -Tags 0 {
         $BicepExtensionDirectory | Should -Not -BeNullOrEmpty
     }
 }
+
+# Challenge 2
+
 Describe "Deploy Your First Bicep Resource" -Tags 1 {
     BeforeAll {
         Connect-AzAccount -Identity
@@ -49,6 +55,8 @@ Describe "Deploy Your First Bicep Resource" -Tags 1 {
         $StorageAccount.Sku.Name | Should -Be "Standard_LRS"
     }
 }
+
+# Challenge 3
 
 Describe "Make Your Bicep File Reusable" -Tags 2 {
     BeforeAll {
@@ -109,4 +117,8 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
         $StorageAccount = Get-AzStorageAccount
         ($StorageAccount | Select-Object -ExpandProperty Sku).Name | Where-Object {$_ -eq "Standard_ZRS"} | Should -Not -BeNullOrEmpty
     }
+}
+
+Describe "Using Expressions" -Tags 3 {
+
 }

@@ -1,4 +1,4 @@
-param name string
+param name string = toLower(uniqueString(resourceGroup().id))
 param location string = resourceGroup().location
 @allowed([
 'Premium_LRS'
