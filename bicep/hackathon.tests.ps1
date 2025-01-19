@@ -144,6 +144,9 @@ Describe "What If and Deployment Modes" -Tags 4 {
 # Challenge 6 - Decorating Parameters, and Interpolation
 
 Describe "Decorating Parameters, and Interpolation" -Tags 5 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
     It "main.bicep should contain @minLength(3)" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
         $StorageAccountName = $BicepFile | Select-String -Pattern "@minLength(3)" -SimpleMatch
@@ -165,10 +168,10 @@ Describe "Decorating Parameters, and Interpolation" -Tags 5 {
         $Allowed | Should -Not -BeNullOrEmpty
     }
     It "Deploying main.bicep using a name with a length over 24 should fail" {
-        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -NameFromTemplate "asdfghjklqwertyuiopzxcvbnm1234" -WhatIf | Should -Throw
+        {New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -NameFromTemplate "asdfghjklqwertyuiopzxcvbnm1234" -WhatIf }| Should -Throw
     }
     It "Deploying main.bicep using an invalid skuName should fail" {
-        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -skuName "asdfghjklqwertyuiopzxcvbnm1234" -WhatIf | Should -Throw
+        {New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -skuName "asdfghjklqwertyuiopzxcvbnm1234" -WhatIf -ErrorAction Stop } | Should -Throw
     }
 }
 
