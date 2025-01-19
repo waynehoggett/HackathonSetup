@@ -178,8 +178,32 @@ Describe "Decorating Parameters, and Interpolation" -Tags 5 {
 # Challenge 7 - Deploying Multiple Resources with Loops and Batching
 
 Describe "Symbolic Names and Outputs" -Tags 6 {
-    It "" {
-
+    It "main.bicep should contain count parameter and default value" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "param count int = 1" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain @maxValue(9)" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "@maxValue(9)" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain @batchSize(3)" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "@batchSize(3)" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account with a names starting with st and ending with 1 should exist" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Where-Object StorageAccountName -like "st*1").StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account with a names starting with st and ending with 2 should exist" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Where-Object StorageAccountName -like "st*2").StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account with a names starting with st and ending with 2 should exist" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Where-Object StorageAccountName -like "st*2").StorageAccountName | Should -Not -BeNullOrEmpty
     }
 }
 
