@@ -165,10 +165,10 @@ Describe "Decorating Parameters, and Interpolation" {
         $Allowed | Should -Not -BeNullOrEmpty
     }
     It "Deploying main.bicep using a name with a length over 24 should fail" {
-        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -NameFromTemplate "asdfghjklqwertyuiopzxcvbnm1234" | Should -Throw
+        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -NameFromTemplate "asdfghjklqwertyuiopzxcvbnm1234" -WhatIf | Should -Throw
     }
     It "Deploying main.bicep using an invalid skuName should fail" {
-        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -skuName "asdfghjklqwertyuiopzxcvbnm1234" | Should -Throw
+        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -skuName "asdfghjklqwertyuiopzxcvbnm1234" -WhatIf | Should -Throw
     }
 }
 
