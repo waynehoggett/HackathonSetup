@@ -15,6 +15,7 @@ function Update-Tests {
 
 # 1
 Write-Host "Starting Challenge 1"
+Update-Tests
 choco install azure-cli -y
 choco install bicep -y
 code --install-extension ms-azuretools.vscode-bicep
@@ -22,6 +23,8 @@ code --install-extension ms-azuretools.vscode-bicep
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 2
+Write-Host "Starting Challenge 2"
+Update-Tests
 New-Item -Path "C:\" -Name "Bicep" -ItemType Directory -ErrorAction SilentlyContinue
 Set-Location -Path "C:\Bicep"
 
@@ -34,6 +37,8 @@ New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Ob
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 3
+Write-Host "Starting Challenge 3"
+Update-Tests
 New-Item -Path "C:\" -Name "Bicep" -ItemType Directory -ErrorAction SilentlyContinue
 Set-Location -Path "C:\Bicep"
 
@@ -51,6 +56,7 @@ New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Ob
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 4
+Write-Host "Starting Challenge 4"
 Update-Tests
 
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/4/main.bicep' -Destination "C:\Bicep\main.bicep"
@@ -59,6 +65,7 @@ New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Ob
 
 
 # 5
+Write-Host "Starting Challenge 5"
 Update-Tests
 New-Item -Path "C:\" -Name "Output" -ItemType Directory -ErrorAction SilentlyContinue
 
@@ -74,21 +81,41 @@ Get-AzResourceGroupDeploymentWhatIfResult -Mode Complete -ResourceGroupName (Get
 New-AzResourceGroupDeployment -Mode Complete -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force
 
 # 6
+Write-Host "Starting Challenge 6"
+Update-Tests
 
 # 7
+Write-Host "Starting Challenge 7"
+Update-Tests
 
 # 8
+Write-Host "Starting Challenge 8"
+Update-Tests
 
 # 9
+Write-Host "Starting Challenge 9"
+Update-Tests
 
 # 10
+Write-Host "Starting Challenge 10"
+Update-Tests
 
 # 11
+Write-Host "Starting Challenge 11"
+Update-Tests
 
 # 12
+Write-Host "Starting Challenge 12"
+Update-Tests
 
 # 13
+Write-Host "Starting Challenge 13"
+Update-Tests
 
 # 14
+Write-Host "Starting Challenge 14"
+Update-Tests
 
 # 15
+Write-Host "Starting Challenge 15"
+Update-Tests

@@ -1,6 +1,6 @@
 # Pester test script
 
-# Challenge 1
+# Challenge 1 - Set-up Your Environment
 
 Describe " Install Software and VS Code Extensions" -Tags 0 {
     It "Should have Azure CLI or Azure PowerShell installed" {
@@ -28,7 +28,7 @@ Describe " Install Software and VS Code Extensions" -Tags 0 {
     }
 }
 
-# Challenge 2
+# Challenge 2 - Deploy Your First Bicep Resource
 
 Describe "Deploy Your First Bicep Resource" -Tags 1 {
     BeforeAll {
@@ -56,7 +56,7 @@ Describe "Deploy Your First Bicep Resource" -Tags 1 {
     }
 }
 
-# Challenge 3
+# Challenge 3 - Make Your Bicep File Reusable
 
 Describe "Make Your Bicep File Reusable" -Tags 2 {
     BeforeAll {
@@ -104,7 +104,7 @@ Describe "Make Your Bicep File Reusable" -Tags 2 {
     }
 }
 
-# Challenge 4
+# Challenge 4 - Using Expressions
 
 Describe "Using Expressions" -Tags 3 {
     BeforeAll {
@@ -117,7 +117,7 @@ Describe "Using Expressions" -Tags 3 {
 
 }
 
-# Challenge 5
+# Challenge 5 - What If and Deployment Modes
 
 Describe "What If and Deployment Modes" -Tags 4 {
 
@@ -141,7 +141,7 @@ Describe "What If and Deployment Modes" -Tags 4 {
 
 }
 
-# Challenge 6
+# Challenge 6 - Decorating Parameters, and Interpolation
 
 Describe "Decorating Parameters, and Interpolation" {
     It "main.bicep should contain @minLength(3)" {
@@ -154,9 +154,48 @@ Describe "Decorating Parameters, and Interpolation" {
         $StorageAccountName = $BicepFile | Select-String -Pattern "@maxLength(24)" -SimpleMatch
         $StorageAccountName | Should -Not -BeNullOrEmpty
     }
+    It "main.bicep should contain 'st" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "'st" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
     It "main.bicep should contain @allowed" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
         $Allowed = $BicepFile | Select-String -Pattern "@allowed"
         $Allowed | Should -Not -BeNullOrEmpty
     }
+    It "Deploying main.bicep using a name with a length over 24 should fail" {
+        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -NameFromTemplate "asdfghjklqwertyuiopzxcvbnm1234" | Should -Throw
+    }
+    It "Deploying main.bicep using an invalid skuName should fail" {
+        New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -skuName "asdfghjklqwertyuiopzxcvbnm1234" | Should -Throw
+    }
 }
+
+# Challenge 7 - Deploying Multiple Resources with Loops and Batching
+
+Describe "Symbolic Names and Outputs" {
+    It "" {
+
+    }
+}
+
+
+# Challenge 8 - Symbolic Names and Outputs
+
+
+
+# Challenge 9 - Conditional Deployments
+
+# Challenge 10 - Working with Existing Resources and Scopes
+
+# Challenge 11 - Advanced Parameters and Nesting
+
+
+# Challenge 12 - Linting and Testing
+
+# Challenge 13 - Convert Existing Resources
+
+# Challenge 14 - Modules and Private Registries
+
+# Challenge 15 - Azure Verified Modules

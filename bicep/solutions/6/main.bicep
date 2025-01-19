@@ -1,6 +1,6 @@
 @maxLength(24)
 @minLength(3)
-param name string
+param name string = toLower('st${uniqueString(resourceGroup().id)}')
 
 param location string = 'australiaeast'
 @allowed([
