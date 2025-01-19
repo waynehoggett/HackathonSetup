@@ -13,7 +13,7 @@ param skuName string = 'Standard_LRS'
 
 @batchSize(3)
 resource storageaccount 'Microsoft.Storage/storageAccounts@2021-02-01' = [for i in range(1, count): {
-  name: 'st${substring(uniqueString(resourceGroup().id), 0, 21)}${i}'
+  name: 'st${uniqueString(resourceGroup().id)}${i}'
   location: location
   kind: 'StorageV2'
   sku: {
