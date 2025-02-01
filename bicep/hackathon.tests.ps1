@@ -208,59 +208,59 @@ Describe "Symbolic Names and Outputs" -Tags 6 {
 }
 
 
-# Challenge 8 - Symbolic Names and Outputs
-Describe "Symbolic Names and Outputs" -Tags 7 {
-    It "" {
+# # Challenge 8 - Symbolic Names and Outputs
+# Describe "Symbolic Names and Outputs" -Tags 7 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
 
-# Challenge 9 - Conditional Deployments
-Describe "Symbolic Names and Outputs" -Tags 8 {
-    It "" {
+# # Challenge 9 - Conditional Deployments
+# Describe "Symbolic Names and Outputs" -Tags 8 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
-# Challenge 10 - Working with Existing Resources and Scopes
-Describe "Symbolic Names and Outputs" -Tags 9 {
-    It "" {
+# # Challenge 10 - Working with Existing Resources and Scopes
+# Describe "Symbolic Names and Outputs" -Tags 9 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
-# Challenge 11 - Advanced Parameters and Nesting
-Describe "Symbolic Names and Outputs" -Tags 10 {
-    It "" {
+# # Challenge 11 - Advanced Parameters and Nesting
+# Describe "Symbolic Names and Outputs" -Tags 10 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
-# Challenge 12 - Linting and Testing
-Describe "Symbolic Names and Outputs" -Tags 11 {
-    It "" {
+# # Challenge 12 - Linting and Testing
+# Describe "Symbolic Names and Outputs" -Tags 11 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
-# Challenge 13 - Convert Existing Resources
-Describe "Symbolic Names and Outputs" -Tags 12 {
-    It "" {
+# # Challenge 13 - Convert Existing Resources
+# Describe "Symbolic Names and Outputs" -Tags 12 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
-# Challenge 14 - Modules and Private Registries
-Describe "Symbolic Names and Outputs" -Tags 13 {
-    It "" {
+# # Challenge 14 - Modules and Private Registries
+# Describe "Symbolic Names and Outputs" -Tags 13 {
+#     It "" {
 
-    }
-}
+#     }
+# }
 
-# Challenge 15 - Azure Verified Modules
-Describe "Symbolic Names and Outputs" -Tags 14 {
-    It "" {
+# # Challenge 15 - Azure Verified Modules
+# Describe "Symbolic Names and Outputs" -Tags 14 {
+#     It "" {
 
-    }
-}
+#     }
+# }
