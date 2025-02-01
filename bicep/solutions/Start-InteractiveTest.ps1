@@ -63,7 +63,6 @@ Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/Hacka
 
 New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -WhatIf
 
-
 # 5
 Write-Host "Starting Challenge 5"
 Update-Tests
@@ -84,21 +83,36 @@ New-AzResourceGroupDeployment -Mode Complete -ResourceGroupName (Get-AzResourceG
 Write-Host "Starting Challenge 6"
 Update-Tests
 
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/6/main.bicep' -Destination "C:\Bicep\main.bicep"
+
+
 # 7
 Write-Host "Starting Challenge 7"
 Update-Tests
+
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/7/main.bicep' -Destination "C:\Bicep\main.bicep"
+
 
 # 8
 Write-Host "Starting Challenge 8"
 Update-Tests
 
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/8/main.bicep' -Destination "C:\Bicep\main.bicep"
+
+
 # 9
 Write-Host "Starting Challenge 9"
 Update-Tests
 
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/9/main.bicep' -Destination "C:\Bicep\main.bicep"
+
+
 # 10
 Write-Host "Starting Challenge 10"
 Update-Tests
+
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/10/main.bicep' -Destination "C:\Bicep\main.bicep"
+
 
 # 11
 Write-Host "Starting Challenge 11"

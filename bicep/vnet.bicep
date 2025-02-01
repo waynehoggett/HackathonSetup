@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' = {
-  name: 'vnet1'
+  name: 'VNet1'
   location: location
   properties: {
     addressSpace: {
