@@ -208,12 +208,27 @@ Describe "Symbolic Names and Outputs" -Tags 6 {
 }
 
 
-# # Challenge 8 - Symbolic Names and Outputs
-# Describe "Symbolic Names and Outputs" -Tags 7 {
-#     It "" {
-
-#     }
-# }
+# Challenge 8 - Symbolic Names and Outputs
+Describe "Symbolic Names and Outputs" -Tags 7 {
+    It "main.bicep should contain an array output named storageAccountNames" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "output storageAccountNames array" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain an array output named blobServiceUris" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $StorageAccountName = $BicepFile | Select-String -Pattern "output blobServiceUris array" -SimpleMatch
+        $StorageAccountName | Should -Not -BeNullOrEmpty
+    }
+    It "When deployed, main.bicep should have 3 items in the output storageAccountNames" {
+        $StorageAccountNames = (Get-AzResourceGroupDeploymentOutput -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -OutputName storageAccountNames).Value
+        $StorageAccountNames.Count | Should -Be 3
+    }
+    It "When deployed, main.bicep should have 3 items in the output blobServiceUris" {
+        $StorageAccountNames = (Get-AzResourceGroupDeploymentOutput -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -OutputName storageAccountNames).Value
+        $StorageAccountNames.Count | Should -Be 3
+    }
+}
 
 
 # # Challenge 9 - Conditional Deployments
