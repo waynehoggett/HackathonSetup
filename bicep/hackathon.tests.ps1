@@ -248,8 +248,8 @@ Describe "Symbolic Names and Outputs" -Tags 8 {
         {New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -dataConfidentialityLevel "High" -WhatIf -ErrorAction Stop } | Should -Throw
     }
     It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have a tag named 'dataConfidentialityLevel' with a value of 'SENSITIVE'" {
-        $StorageAccount = Get-AzStorageAccount
-        ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Tags.dataConfidentialityLevel | Should -Not -BeNullOrEmpty
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount  | Should -Not -BeNullOrEmpty
     }
     It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to false" {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
