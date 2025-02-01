@@ -193,15 +193,15 @@ Describe "Symbolic Names and Outputs" -Tags 6 {
         $StorageAccountName = $BicepFile | Select-String -Pattern "@batchSize(3)" -SimpleMatch
         $StorageAccountName | Should -Not -BeNullOrEmpty
     }
-    It "A storage account with a names starting with st and ending with 1 should exist" {
+    It "A storage account with a name starting with st and ending with 1 should exist" {
         $StorageAccount = Get-AzStorageAccount
         ($StorageAccount | Where-Object StorageAccountName -like "st*1").StorageAccountName | Should -Not -BeNullOrEmpty
     }
-    It "A storage account with a names starting with st and ending with 2 should exist" {
+    It "A storage account with a name starting with st and ending with 2 should exist" {
         $StorageAccount = Get-AzStorageAccount
         ($StorageAccount | Where-Object StorageAccountName -like "st*2").StorageAccountName | Should -Not -BeNullOrEmpty
     }
-    It "A storage account with a names starting with st and ending with 2 should exist" {
+    It "A storage account with a name starting with st and ending with 2 should exist" {
         $StorageAccount = Get-AzStorageAccount
         ($StorageAccount | Where-Object StorageAccountName -like "st*2").StorageAccountName | Should -Not -BeNullOrEmpty
     }
