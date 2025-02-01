@@ -236,6 +236,9 @@ Describe "Symbolic Names and Outputs" -Tags 7 {
 
 # Challenge 9 - Conditional Deployments
 Describe "Symbolic Names and Outputs" -Tags 8 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
     It "main.bicep should contain a parameter named dataConfidentialityLevel" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
         $RequiredParam = $BicepFile | Select-String -Pattern "param dataConfidentialityLevel string" -SimpleMatch
@@ -249,12 +252,12 @@ Describe "Symbolic Names and Outputs" -Tags 8 {
         ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Tags.dataConfidentialityLevel | Should -Not -BeNullOrEmpty
     }
     It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to false" {
-        $StorageAccount = Get-AzStorageAccount
-        ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Properties.AllowBlobPublicAccess | Should -Be $False
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.AllowBlobPublicAccess | Should -Be $False
     }
-    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to true" {
-        $StorageAccount = Get-AzStorageAccount
-        ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Properties.supportsHttpsTrafficOnly | Should -Be $True
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have supportsHttpsTrafficOnly set to true" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.EnableHttpsTrafficOnly | Should -Be $True
     }   
 }
 
