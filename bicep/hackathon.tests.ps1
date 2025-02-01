@@ -234,12 +234,29 @@ Describe "Symbolic Names and Outputs" -Tags 7 {
     }
 }
 
-# # Challenge 9 - Conditional Deployments
-# Describe "Symbolic Names and Outputs" -Tags 8 {
-#     It "" {
-
-#     }
-# }
+# Challenge 9 - Conditional Deployments
+Describe "Symbolic Names and Outputs" -Tags 8 {
+    It "main.bicep should contain a parameter named dataConfidentialityLevel" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $RequiredParam = $BicepFile | Select-String -Pattern "param dataConfidentialityLevel string" -SimpleMatch
+        $RequiredParam | Should -Not -BeNullOrEmpty
+    }
+    It "Deploying a storage account with dataConfidentialityLevel set to 'High' should fail" {
+        {New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -dataConfidentialityLevel "High" -WhatIf -ErrorAction Stop } | Should -Throw
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have a tag named 'dataConfidentialityLevel' with a value of 'SENSITIVE'" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Tags.dataConfidentialityLevel | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to false" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Properties.AllowBlobPublicAccess | Should -Be $False
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to true" {
+        $StorageAccount = Get-AzStorageAccount
+        ($StorageAccount | Where-Object Tags.ConfidentialityLevel -eq "SENSITIVE").Properties.supportsHttpsTrafficOnly | Should -Be $True
+    }   
+}
 
 # # Challenge 10 - Working with Existing Resources and Scopes
 # Describe "Symbolic Names and Outputs" -Tags 9 {
