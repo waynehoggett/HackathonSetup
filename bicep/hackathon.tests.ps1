@@ -234,7 +234,6 @@ Describe "Symbolic Names and Outputs" -Tags 7 {
     }
 }
 
-
 # # Challenge 9 - Conditional Deployments
 # Describe "Symbolic Names and Outputs" -Tags 8 {
 #     It "" {
