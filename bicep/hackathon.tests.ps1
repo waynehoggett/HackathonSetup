@@ -261,12 +261,26 @@ Describe "Symbolic Names and Outputs" -Tags 8 {
     }   
 }
 
-# # Challenge 10 - Working with Existing Resources and Scopes
-# Describe "Symbolic Names and Outputs" -Tags 9 {
-#     It "" {
-
-#     }
-# }
+# Challenge 10 - Working with Existing Resources and Scopes
+Describe "Working with Existing Resources and Scopes" -Tags 9 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
+    It "main.bicep should contain an existing resource" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "existing" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain an scoped resource" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "scope" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have a networkACL with a single VirtualNetworkRule" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.NetworkRuleSet.VirtualNetworkRules.Count | Should -Be 1
+    }  
+}
 
 # # Challenge 11 - Advanced Parameters and Nesting
 # Describe "Symbolic Names and Outputs" -Tags 10 {
