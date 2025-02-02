@@ -63,6 +63,8 @@ Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/Hacka
 
 New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -WhatIf
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
+
 # 5
 Write-Host "Starting Challenge 5"
 Update-Tests
@@ -79,12 +81,15 @@ Get-AzResourceGroupDeploymentWhatIfResult -Mode Complete -ResourceGroupName (Get
 ## Complete Deployment
 New-AzResourceGroupDeployment -Mode Complete -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
+
 # 6
 Write-Host "Starting Challenge 6"
 Update-Tests
 
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/6/main.bicep' -Destination "C:\Bicep\main.bicep"
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 7
 Write-Host "Starting Challenge 7"
@@ -92,6 +97,7 @@ Update-Tests
 
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/7/main.bicep' -Destination "C:\Bicep\main.bicep"
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 8
 Write-Host "Starting Challenge 8"
@@ -99,37 +105,61 @@ Update-Tests
 
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/8/main.bicep' -Destination "C:\Bicep\main.bicep"
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 9
 Write-Host "Starting Challenge 9"
 Update-Tests
 
+Connect-AzAccount -Identity
+
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/9/main.bicep' -Destination "C:\Bicep\main.bicep"
 
+New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force -Count 1 -dataConfidentialityLevel "SENSITIVE"
+
+Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 10
 Write-Host "Starting Challenge 10"
 Update-Tests
 
+Connect-AzAccount -Identity
+
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/10/main.bicep' -Destination "C:\Bicep\main.bicep"
 
+$VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
+(Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
+
+New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force -Count 1 -dataConfidentialityLevel "SENSITIVE"
+
+Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 11
 Write-Host "Starting Challenge 11"
 Update-Tests
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
+
 # 12
 Write-Host "Starting Challenge 12"
 Update-Tests
+
+Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 13
 Write-Host "Starting Challenge 13"
 Update-Tests
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
+
 # 14
 Write-Host "Starting Challenge 14"
 Update-Tests
 
+Read-Host -Prompt "Verify and Continue and then Press Enter"
+
 # 15
 Write-Host "Starting Challenge 15"
 Update-Tests
+
+Read-Host -Prompt "Verify and Continue and then Press Enter"
