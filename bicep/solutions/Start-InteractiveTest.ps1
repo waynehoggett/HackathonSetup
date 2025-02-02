@@ -166,7 +166,8 @@ Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/Hacka
 $VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
 (Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
 
-Install-Module -Name PSRule -Scope AllUsers
+Install-Module -Name PSRule -Scope AllUsers -Force
+code --install-extension ms-vscode.PowerShell
 code --install-extension bewhite.psrule-vscode
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"

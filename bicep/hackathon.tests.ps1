@@ -365,7 +365,7 @@ Describe "Symbolic Names and Outputs" -Tags 11 {
 #     }
 # }
 
-# # Challenge 15 - Azure Verified Modules
+# # Challenge 14 - Azure Verified Modules
 # Describe "Symbolic Names and Outputs" -Tags 14 {
 #     It "" {
 
