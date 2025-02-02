@@ -154,12 +154,20 @@ $StorageAccount3 = @{dataConfidentialityLevel = "PROTECTED"; skuName = "Standard
 $StorageAccounts = $StorageAccount1, $StorageAccount2, $StorageAccount3
 New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force -storageAccounts $StorageAccounts
 
-
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 12
 Write-Host "Starting Challenge 12"
 Update-Tests
+
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/bicepconfig.json' -Destination "C:\Bicep\bicepconfig.json"
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/main.bicep' -Destination "C:\Bicep\main.bicep"
+
+$VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
+(Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
+
+Install-Module -Name PSRule -Scope AllUsers
+code --install-extension bewhite.psrule-vscode
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 

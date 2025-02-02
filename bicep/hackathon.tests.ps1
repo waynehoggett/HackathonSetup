@@ -20,7 +20,7 @@ Describe " Install Software and VS Code Extensions" -Tags 0 {
         $bicep = Get-Command bicep -ErrorAction SilentlyContinue
         $bicep | Should -Not -BeNullOrEmpty
     }
-    It "Should have Visual Studio Code Extension installed: Hashicorp Terraform" {
+    It "Should have Visual Studio Code Extension installed: Bicep" {
         $UserPath = Get-ChildItem C:\Users | Where-Object Name -like "Hacker*" | Select-Object -ExpandProperty FullName
         $VSCodeExtensionPath = Join-Path -Path $UserPath -ChildPath ".vscode\extensions"
         $BicepExtensionDirectory = Get-ChildItem $VSCodeExtensionPath | Where-Object Name -like "*bicep*"
@@ -334,12 +334,29 @@ Describe "Advanced Parameters" -Tags 10 {
     }  
 }
 
-# # Challenge 12 - Linting and Testing
-# Describe "Symbolic Names and Outputs" -Tags 11 {
-#     It "" {
-
-#     }
-# }
+# Challenge 12 - Linting and Testing
+Describe "Symbolic Names and Outputs" -Tags 11 {
+    It "Linter rule adminusername-should-not-be-literal should have the level of error." {
+        $json = Get-Content -Raw -Path "C:\Bicep\bicepconfig.json" | ConvertFrom-Json
+        $rule = $json.analyzers.core.rules.'adminusername-should-not-be-literal'.level
+        $rule | Should -Be "error"
+    }
+    It "Linter rule no-unused-params should have the level of error." {
+        $json = Get-Content -Raw -Path "C:\Bicep\bicepconfig.json" | ConvertFrom-Json
+        $rule = $json.analyzers.core.rules.'no-unused-params'.level
+        $rule | Should -Be "error"
+    }
+    It "Should have Visual Studio Code Extension installed: psrule" {
+        $UserPath = Get-ChildItem C:\Users | Where-Object Name -like "Hacker*" | Select-Object -ExpandProperty FullName
+        $VSCodeExtensionPath = Join-Path -Path $UserPath -ChildPath ".vscode\extensions"
+        $BicepExtensionDirectory = Get-ChildItem $VSCodeExtensionPath | Where-Object Name -like "*psrule*"
+        $BicepExtensionDirectory | Should -Not -BeNullOrEmpty
+    }
+    It "PowerShell Module PSRule should be installed" {
+        $PSRuleModule = Get-Module PSRule -ListAvailable
+        $PSRuleModule | Should -Not -BeNullOrEmpty
+    }
+}
 
 # # Challenge 13 - Convert Existing Resources
 # Describe "Symbolic Names and Outputs" -Tags 12 {
