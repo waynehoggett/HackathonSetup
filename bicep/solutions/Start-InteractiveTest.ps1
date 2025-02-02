@@ -168,7 +168,6 @@ $VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like
 
 Install-Module -Name PSRule -Scope AllUsers -Force
 Install-Module -Name 'PSRule.Rules.Azure' -Scope AllUsers -Force
-Install-Module -Name 'PSRule.Rules.CAF' -Scope AllUsers -Force
 code --install-extension ms-vscode.PowerShell
 code --install-extension bewhite.psrule-vscode
 
