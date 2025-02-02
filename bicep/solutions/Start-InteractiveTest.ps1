@@ -167,6 +167,8 @@ $VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like
 (Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
 
 Install-Module -Name PSRule -Scope AllUsers -Force
+Install-Module -Name 'PSRule.Rules.Azure' -Scope AllUsers -Force
+Install-Module -Name 'PSRule.Rules.CAF' -Scope AllUsers -Force
 code --install-extension ms-vscode.PowerShell
 code --install-extension bewhite.psrule-vscode
 
@@ -180,12 +182,6 @@ Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 14
 Write-Host "Starting Challenge 14"
-Update-Tests
-
-Read-Host -Prompt "Verify and Continue and then Press Enter"
-
-# 15
-Write-Host "Starting Challenge 15"
 Update-Tests
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"
