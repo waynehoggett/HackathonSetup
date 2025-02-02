@@ -283,7 +283,7 @@ Describe "Working with Existing Resources and Scopes" -Tags 9 {
 }
 
 # # Challenge 11 - Advanced Parameters and Nesting
-# Describe "Symbolic Names and Outputs" -Tags 10 {
+# Describe "Advanced Parameters and Nesting" -Tags 10 {
 #     It "" {
 
 #     }
