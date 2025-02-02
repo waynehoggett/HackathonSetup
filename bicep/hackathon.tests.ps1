@@ -251,10 +251,6 @@ Describe "Symbolic Names and Outputs" -Tags 8 {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
         $StorageAccount  | Should -Not -BeNullOrEmpty
     }
-    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to false" {
-        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
-        $StorageAccount.AllowBlobPublicAccess | Should -Be $False
-    }
     It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have supportsHttpsTrafficOnly set to true" {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
         $StorageAccount.EnableHttpsTrafficOnly | Should -Be $True
@@ -282,12 +278,49 @@ Describe "Working with Existing Resources and Scopes" -Tags 9 {
     }  
 }
 
-# # Challenge 11 - Advanced Parameters and Nesting
-# Describe "Advanced Parameters and Nesting" -Tags 10 {
-#     It "" {
+# Challenge 11 - Advanced Parameters
+Describe "Advanced Parameters" -Tags 10 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
+    # OFFICIAL
+    It "A storage account deployed with the dataConfidentialityLevel set to 'OFFICIAL' should have a tag named 'dataConfidentialityLevel' with a value of 'SENSITIVE'" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "OFFICIAL" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount  | Should -Not -BeNullOrEmpty
+    }
 
-#     }
-# }
+    # SENSITIVE
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have a tag named 'dataConfidentialityLevel' with a value of 'SENSITIVE'" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount  | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to false" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.AllowBlobPublicAccess | Should -Be $False
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have supportsHttpsTrafficOnly set to true" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.EnableHttpsTrafficOnly | Should -Be $True
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have a networkACL with a single VirtualNetworkRule" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.NetworkRuleSet.VirtualNetworkRules.Count | Should -Be 1
+    }
+
+    # PROTECTED
+    It "A storage account deployed with the dataConfidentialityLevel set to 'PROTECTED' should have a tag named 'dataConfidentialityLevel' with a value of 'PROTECTED'" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "PROTECTED" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount  | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'PROTECTED' should have allowBlobPublicAccess set to false" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "PROTECTED" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.AllowBlobPublicAccess | Should -Be $False
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'PROTECTED' should have supportsHttpsTrafficOnly set to true" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "PROTECTED" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
+        $StorageAccount.EnableHttpsTrafficOnly | Should -Be $True
+    }  
+}
 
 # # Challenge 12 - Linting and Testing
 # Describe "Symbolic Names and Outputs" -Tags 11 {

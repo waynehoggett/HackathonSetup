@@ -138,6 +138,23 @@ Read-Host -Prompt "Verify and Continue and then Press Enter"
 Write-Host "Starting Challenge 11"
 Update-Tests
 
+Connect-AzAccount -Identity
+
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/11/main.bicep' -Destination "C:\Bicep\main.bicep"
+
+$VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
+(Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
+
+# Remove existing storage accounts before continuing
+Get-AzStorageAccount | Remove-AzStorageAccount -Force
+
+$StorageAccount1 = @{dataConfidentialityLevel = "OFFICIAL"; skuName = "Standard_LRS"}
+$StorageAccount2 = @{dataConfidentialityLevel = "SENSITIVE"; skuName = "Standard_ZRS"}
+$StorageAccount3 = @{dataConfidentialityLevel = "PROTECTED"; skuName = "Standard_GRS"}
+$StorageAccounts = $StorageAccount1, $StorageAccount2, $StorageAccount3
+New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force -storageAccounts $StorageAccounts
+
+
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 12
