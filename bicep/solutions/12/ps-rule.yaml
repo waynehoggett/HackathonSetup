@@ -5,12 +5,10 @@
 requires:
   PSRule: '@pre >=2.8.1'
   PSRule.Rules.Azure: '>=1.29.0'
-  PSRule.Rules.CAF: '>=0.3.0'
 
 include:
   module:
   - PSRule.Rules.Azure
-  - PSRule.Rules.CAF
 
 output:
   as: Summary
