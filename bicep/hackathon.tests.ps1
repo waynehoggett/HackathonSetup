@@ -288,11 +288,19 @@ Describe "Advanced Parameters" -Tags 10 {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "OFFICIAL" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
         $StorageAccount  | Should -Not -BeNullOrEmpty
     }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'OFFICIAL' SKU should be Standard_LRS" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "OFFICIAL" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount.Sku.Name | Should -Be "Standard_LRS"
+    }
 
     # SENSITIVE
     It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have a tag named 'dataConfidentialityLevel' with a value of 'SENSITIVE'" {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
         $StorageAccount  | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' SKU should be Standard_ZRS" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount.Sku.Name | Should -Be "Standard_ZRS"
     }
     It "A storage account deployed with the dataConfidentialityLevel set to 'SENSITIVE' should have allowBlobPublicAccess set to false" {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "SENSITIVE" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
@@ -311,6 +319,10 @@ Describe "Advanced Parameters" -Tags 10 {
     It "A storage account deployed with the dataConfidentialityLevel set to 'PROTECTED' should have a tag named 'dataConfidentialityLevel' with a value of 'PROTECTED'" {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "PROTECTED" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
         $StorageAccount  | Should -Not -BeNullOrEmpty
+    }
+    It "A storage account deployed with the dataConfidentialityLevel set to 'PROTECTED' SKU should be Standard_GRS" {
+        $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "PROTECTED" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts"
+        $StorageAccount.Sku.Name | Should -Be "Standard_GRS"
     }
     It "A storage account deployed with the dataConfidentialityLevel set to 'PROTECTED' should have allowBlobPublicAccess set to false" {
         $StorageAccount = Get-AzResource -TagName "dataConfidentialityLevel" -TagValue "PROTECTED" | Where-Object ResourceType -eq "Microsoft.Storage/storageAccounts" | Get-AzStorageAccount | Select-Object -First 1
@@ -331,13 +343,6 @@ Describe "Advanced Parameters" -Tags 10 {
 
 # # Challenge 13 - Convert Existing Resources
 # Describe "Symbolic Names and Outputs" -Tags 12 {
-#     It "" {
-
-#     }
-# }
-
-# # Challenge 14 - Modules and Private Registries
-# Describe "Symbolic Names and Outputs" -Tags 13 {
 #     It "" {
 
 #     }
