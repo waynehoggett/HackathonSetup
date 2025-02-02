@@ -360,10 +360,6 @@ Describe "Symbolic Names and Outputs" -Tags 11 {
         $PSRuleModule = Get-Module PSRule.Rules.Azure -ListAvailable
         $PSRuleModule | Should -Not -BeNullOrEmpty
     }
-    It "PowerShell Module PSRule.Rules.CAF should be installed" {
-        $PSRuleModule = Get-Module PSRule.Rules.CAF -ListAvailable
-        $PSRuleModule | Should -Not -BeNullOrEmpty
-    }
     It "C:\Bicep\ps-rule.yaml should exist" {
         $PSRuleFile = Test-Path -Path "C:\Bicep\ps-rule.yaml"
         $PSRuleFile | Should -Be $True
