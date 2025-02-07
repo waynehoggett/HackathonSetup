@@ -9,6 +9,9 @@ $env:ChocolateyInstall = Convert-Path "$((Get-Command choco).Path)\..\.."
 Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 refreshenv
 
+# Setup the directories
+New-Item -Path "C:\" -Name "Bicep" -ItemType Directory -ErrorAction SilentlyContinue
+
 function Update-Tests {
     Start-BitsTransfer -Source "https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/hackathon.tests.ps1" -Destination "C:\Tests\hackathon.tests.ps1"
 }
@@ -25,7 +28,6 @@ Read-Host -Prompt "Verify and Continue and then Press Enter"
 # 2
 Write-Host "Starting Challenge 2"
 Update-Tests
-New-Item -Path "C:\" -Name "Bicep" -ItemType Directory -ErrorAction SilentlyContinue
 Set-Location -Path "C:\Bicep"
 
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/2/main.bicep' -Destination "C:\Bicep\main.bicep"
@@ -162,6 +164,8 @@ Update-Tests
 
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/bicepconfig.json' -Destination "C:\Bicep\bicepconfig.json"
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/main.bicep' -Destination "C:\Bicep\main.bicep"
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/ps-rule.yaml' -Destination "C:\Bicep\ps-rule.yaml"
+
 
 $VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
 (Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
