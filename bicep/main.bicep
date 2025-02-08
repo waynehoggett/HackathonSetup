@@ -1,12 +1,11 @@
 param guid string = newGuid()
-param basDnsPrefix string = 'bas${uniqueString(guid)}'
 param dnsPrefix string = 'hack${uniqueString(guid)}'
 param location string = resourceGroup().location
-param virtualNetworkName string = 'vnet-${uniqueString(guid)}'
 param vmName string = 'vm${uniqueString(guid)}'
 param vmSize string = 'Standard_F4s_v2' // Alternate sizes: Standard_D2_v3, Standard_D2_v4
 param vmUsername string = 'Hackathon'
-#disable-next-line secure-secrets-in-params
+@secure()
+#disable-next-line secure-parameter-default
 param vmPassword string = 'Password!${uniqueString(guid)}'
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2019-11-01' existing = {
