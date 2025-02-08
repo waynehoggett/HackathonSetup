@@ -66,10 +66,11 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        publisher: 'MicrosoftWindowsDesktop'
-        offer: 'Windows-11'
-        sku: 'win11-22h2-pron'
-        version: 'latest'
+        // publisher: 'MicrosoftWindowsDesktop'
+        // offer: 'Windows-11'
+        // sku: 'win11-22h2-pron'
+        // version: 'latest'
+        
       }
       osDisk: {
         name: 'osdisk-${vmName}'
@@ -104,11 +105,11 @@ resource windowsVMExtensions 'Microsoft.Compute/virtualMachines/extensions@2020-
     autoUpgradeMinorVersion: true
     settings: {
       fileUris: [
-        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/Setup-Workstation.ps1'
+        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/Set-ImagedWorkstation.ps1'
       ]
     }
     protectedSettings: {
-      commandToExecute: 'Powershell -ExecutionPolicy Bypass -File Setup-Workstation.ps1'
+      commandToExecute: 'Powershell -ExecutionPolicy Bypass -File Set-ImagedWorkstation.ps1'
     }
   }
 }

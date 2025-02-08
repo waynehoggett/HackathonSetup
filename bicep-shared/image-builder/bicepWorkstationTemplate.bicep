@@ -1,11 +1,11 @@
 param location string = resourceGroup().location
 param managedIdentityName string = 'umi-aue-imagebuilder'
-param imageGalleryName string = 'gal-aue-hackathon'
+param imageGalleryName string = 'gal_aue_hackathon'
 param imageDefinitionProperties object = {
   name: 'BicepWorkstation'
-  publisher: 'MicrosoftWindowsDesktop'
-  offer: 'Windows-11'
-  sku: 'win11-22h2-pron'
+  publisher: 'MicrosoftWindowsServer'
+  offer: 'WindowsServer'
+  sku: '2016-Datacenter'
   version: 'latest'
 }
 param vmSize string = 'Standard_F4s_v2'
