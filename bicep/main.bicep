@@ -48,6 +48,11 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   }
 }
 
+resource imageGallery 'Microsoft.Compute/galleries@2022-03-03' existing = {
+  name: 'gal_aue_hackathon'
+  scope: resourceGroup('rg-aue-imagebuilder')
+}
+
 resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   #disable-next-line use-stable-resource-identifiers
   name: vmName
@@ -66,11 +71,11 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        // publisher: 'MicrosoftWindowsDesktop'
-        // offer: 'Windows-11'
-        // sku: 'win11-22h2-pron'
-        // version: 'latest'
-        
+        // id: resourceId('Microsoft.Compute/galleries', 'gal_aue_hackathon', 'images', 'BicepWorkstation', 'versions', '1.0.0')
+        publisher: 'MicrosoftWindowsDesktop'
+        offer: 'Windows-11'
+        sku: 'win11-24h2-ent'
+        version: 'latest'
       }
       osDisk: {
         name: 'osdisk-${vmName}'
