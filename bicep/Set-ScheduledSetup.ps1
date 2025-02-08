@@ -9,11 +9,11 @@ Start-BitsTransfer -Source "https://raw.githubusercontent.com/waynehoggett/Hacka
 # Define the action to run (change this to the path of your program or command)
 $Action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-File C:\Setup\Setup-Workstation.ps1"
 
-# Define the trigger to run the task immediately
-$Trigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMilliseconds(100)
-
 # Define the principal to run the task as SYSTEM
 $Principal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
 
 # Create the scheduled task
 Register-ScheduledTask -TaskName "Setup-Workstation" -Action $Action -Trigger $Trigger -Principal $Principal
+
+# Start the scheduled task
+Start-ScheduledTask -TaskName "Setup-Workstation" -AsJob
