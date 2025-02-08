@@ -17,19 +17,20 @@ Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
 # Refresh the environment to get access to Choco
 refreshenv
 
-# Install Software using Chocolatey
-Start-Job -ScriptBlock { choco install vscode -y }
-## nssm for hosting Pode as a service
-Start-Job -ScriptBlock { choco install nssm -y }
+## nssm for hosting Pode as a service using Chocolatey
+Start-Job -Name 'nssm' -ScriptBlock { choco install nssm -y }
 
 # Install Modules
 Install-PackageProvider -Name Nuget -MinimumVersion 2.8.5.201 -Force
-Start-Job -ScriptBlock { Install-Module Pode -MaximumVersion 2.11.1 -Force }
-Start-Job -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
-Start-Job -ScriptBlock { Install-Module Az.Accounts, Az.Resources, Az.Storage -Scope AllUsers -Force }
+Start-Job -Name 'Pode' -ScriptBlock { Install-Module Pode -MaximumVersion 2.11.1 -Force }
+Start-Job -Name 'Pester' -ScriptBlock { Install-Module -Name Pester -Force -SkipPublisherCheck }
+Start-Job -Name 'Az' -ScriptBlock { Install-Module Az.Accounts, Az.Resources, Az.Storage -Scope AllUsers -Force }
 
-# Wait for previous Jobs to complete
-Get-Job | Wait-Job
+# Install VSCode using Chocolatey
+Start-Job -Name 'vscode' -ScriptBlock { choco install vscode -y }
+
+# Wait for previous critical jobs to complete
+Get-Job -Name 'Pode','Pester','nssm' | Wait-Job
 
 # Create tests directory
 if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
@@ -38,9 +39,9 @@ if (-not (Test-Path 'C:\Tests' -ErrorAction SilentlyContinue)) {
 
 # Download Pester Tests
 ## Hackathon tests
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/hackathon.tests.ps1' -OutFile 'C:\Tests\hackathon.tests.ps1' -UseBasicParsing
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/hackathon.tests.ps1' -Destination 'C:\Tests\hackathon.tests.ps1'
 ## Pode Server file
-Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep-shared/Server.ps1' -OutFile 'C:\Tests\Server.ps1' -UseBasicParsing
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep-shared/Server.ps1' -Destination 'C:\Tests\Server.ps1'
 
 # Enable Access using Windows Firewall
 New-NetFirewallRule -DisplayName "AllowPodeWebServer" -Direction Inbound -Protocol TCP -LocalPort 8080 -Action Allow
