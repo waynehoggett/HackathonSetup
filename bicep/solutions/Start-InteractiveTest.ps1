@@ -190,7 +190,7 @@ Read-Host -Prompt "Verify and Continue and then Press Enter"
 Write-Host "Starting Challenge 14"
 Update-Tests
 
-Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/11/main.bicep' -Destination "C:\Bicep\main.bicep"
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/14/main.bicep' -Destination "C:\Bicep\main.bicep"
 
 $VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
 (Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
@@ -199,6 +199,5 @@ $StorageAccount2 = @{dataConfidentialityLevel = "SENSITIVE"; skuName = "Standard
 $StorageAccount3 = @{dataConfidentialityLevel = "PROTECTED"; skuName = "Standard_GRS"}
 $StorageAccounts = $StorageAccount1, $StorageAccount2, $StorageAccount3
 New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force -storageAccounts $StorageAccounts
-
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"

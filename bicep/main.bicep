@@ -105,11 +105,11 @@ resource windowsVMExtensions 'Microsoft.Compute/virtualMachines/extensions@2020-
     autoUpgradeMinorVersion: true
     settings: {
       fileUris: [
-        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/Setup-Workstation.ps1'
+        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/Set-ScheduledSetup.ps1'
       ]
     }
     protectedSettings: {
-      commandToExecute: 'Powershell -ExecutionPolicy Bypass -File Setup-Workstation.ps1'
+      commandToExecute: 'Powershell -ExecutionPolicy Bypass -File Set-ScheduledSetup.ps1'
     }
   }
 }
