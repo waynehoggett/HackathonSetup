@@ -166,7 +166,6 @@ Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/Hacka
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/main.bicep' -Destination "C:\Bicep\main.bicep"
 Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/12/ps-rule.yaml' -Destination "C:\Bicep\ps-rule.yaml"
 
-
 $VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
 (Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
 
@@ -181,10 +180,25 @@ Read-Host -Prompt "Verify and Continue and then Press Enter"
 Write-Host "Starting Challenge 13"
 Update-Tests
 
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/13/vnet.bicep' -Destination "C:\Bicep\vnet.bicep"
+$VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
+New-AzResourceGroupDeployment -ResourceGroupName $VNetResourceGroup -TemplateFile "C:\Bicep\vnet.bicep"
+
 Read-Host -Prompt "Verify and Continue and then Press Enter"
 
 # 14
 Write-Host "Starting Challenge 14"
 Update-Tests
+
+Start-BitsTransfer -Source 'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/refs/heads/main/bicep/solutions/11/main.bicep' -Destination "C:\Bicep\main.bicep"
+
+$VNetResourceGroup = (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-vnet-*").ResourceGroupName
+(Get-Content "C:\Bicep\main.bicep").Replace('%VNET_RESOURCE_GROUP%', "$($VNetResourceGroup)") | Set-Content "C:\Bicep\main.bicep"
+$StorageAccount1 = @{dataConfidentialityLevel = "OFFICIAL"; skuName = "Standard_LRS"}
+$StorageAccount2 = @{dataConfidentialityLevel = "SENSITIVE"; skuName = "Standard_ZRS"}
+$StorageAccount3 = @{dataConfidentialityLevel = "PROTECTED"; skuName = "Standard_GRS"}
+$StorageAccounts = $StorageAccount1, $StorageAccount2, $StorageAccount3
+New-AzResourceGroupDeployment -ResourceGroupName (Get-AzResourceGroup | Where-Object ResourceGroupName -like "rg-lab-*").ResourceGroupName -TemplateFile "C:\Bicep\main.bicep" -Force -storageAccounts $StorageAccounts
+
 
 Read-Host -Prompt "Verify and Continue and then Press Enter"

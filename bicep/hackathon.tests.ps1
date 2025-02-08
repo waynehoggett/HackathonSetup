@@ -368,6 +368,9 @@ Describe "Symbolic Names and Outputs" -Tags 11 {
 
 # Challenge 13 - Convert Existing Resources
 Describe "Symbolic Names and Outputs" -Tags 12 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
     It "C:\Bicep\vnet.bicep should exist" {
         $BicepFile = Test-Path -Path "C:\Bicep\vnet.bicep"
         $BicepFile | Should -Be $True
@@ -384,10 +387,33 @@ Describe "Symbolic Names and Outputs" -Tags 12 {
         $VirtualNetwork = Get-AzVirtualNetwork
         $VirtualNetwork | Select-Object -ExpandProperty Subnets | Where-Object Name -eq "Subnet1" | Select-Object -ExpandProperty ServiceEndpoints | Select-Object -ExpandProperty Service | Should -Be "Microsoft.Storage"
     }
+}
 
-# # Challenge 14 - Azure Verified Modules
-# Describe "Symbolic Names and Outputs" -Tags 14 {
-#     It "" {
+# Challenge 14 - Azure Verified Modules
+Describe "Azure Verified Modules" -Tags 13 {
+    BeforeAll {
+        Connect-AzAccount -Identity
+    }
+    It "C:\Bicep\vnet.bicep should not exist" {
+        $BicepFile = Test-Path -Path "C:\Bicep\vnet.bicep"
+        $BicepFile | Should -Be $False
 
-#     }
-# }
+    }
+    It "main.bicep should contain an Azure Verified Module" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $Module = $BicepFile | Select-String -Pattern "br/public:avm" -SimpleMatch
+        $Module | Should -Not -BeNullOrEmpty
+    }
+    It "A single virtual network with an address range of 10.0.0.0/16 should exist" {
+        $VirtualNetwork = Get-AzVirtualNetwork
+        ($VirtualNetwork | Select-Object -ExpandProperty AddressSpace).AddressPrefixes | Should -Be '10.0.0.0/16'
+    }
+    It "A single virtual network with two subnets should exist" {
+        $VirtualNetwork = Get-AzVirtualNetwork
+        ($VirtualNetwork | Select-Object -ExpandProperty Subnets).Count | Should -Be 2
+    }
+    It "The Subnet1 in the virtual network should have a Service Endpoint for Microsoft.Storage" {
+        $VirtualNetwork = Get-AzVirtualNetwork
+        $VirtualNetwork | Select-Object -ExpandProperty Subnets | Where-Object Name -eq "Subnet1" | Select-Object -ExpandProperty ServiceEndpoints | Select-Object -ExpandProperty Service | Should -Be "Microsoft.Storage"
+    }
+}
