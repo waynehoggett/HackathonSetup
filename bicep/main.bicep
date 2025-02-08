@@ -71,11 +71,11 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        // id: resourceId('Microsoft.Compute/galleries', 'gal_aue_hackathon', 'images', 'BicepWorkstation', 'versions', '1.0.0')
-        publisher: 'MicrosoftWindowsDesktop'
-        offer: 'Windows-11'
-        sku: 'win11-24h2-ent'
-        version: 'latest'
+        id: resourceId('rg-aue-imagebuilder', 'Microsoft.Compute/galleries', 'gal_aue_hackathon', 'images', 'BicepWorkstation', 'versions', '1.0.0')
+        // publisher: 'MicrosoftWindowsDesktop'
+        // offer: 'Windows-11'
+        // sku: 'win11-24h2-ent'
+        // version: 'latest'
       }
       osDisk: {
         name: 'osdisk-${vmName}'

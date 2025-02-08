@@ -108,7 +108,7 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
     }
   }
   properties: {
-    buildTimeoutInMinutes: 60
+    buildTimeoutInMinutes: 120
     vmProfile: {
       vmSize: vmSize
       osDiskSizeGB: 127
@@ -125,6 +125,7 @@ resource imageTemplate 'Microsoft.VirtualMachineImages/imageTemplates@2022-02-14
         type: 'PowerShell'
         name: 'Set-WorkstationImage'
         runElevated: true
+        runAsSystem: true
         scriptUri: scriptUri
       }
     ]
