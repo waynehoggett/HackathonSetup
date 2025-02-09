@@ -48,11 +48,6 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-11-01' = {
   }
 }
 
-resource imageGallery 'Microsoft.Compute/galleries@2022-03-03' existing = {
-  name: 'gal_aue_hackathon'
-  scope: resourceGroup('rg-aue-imagebuilder')
-}
-
 resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
   #disable-next-line use-stable-resource-identifiers
   name: vmName
@@ -71,11 +66,10 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2020-12-01' = {
     }
     storageProfile: {
       imageReference: {
-        id: resourceId('rg-aue-imagebuilder', 'Microsoft.Compute/galleries/images/versions', 'gal_aue_hackathon', 'BicepWorkstation', '1.0.0')
-        // publisher: 'MicrosoftWindowsDesktop'
-        // offer: 'Windows-11'
-        // sku: 'win11-24h2-ent'
-        // version: 'latest'
+        publisher: 'MicrosoftWindowsDesktop'
+        offer: 'Windows-11'
+        sku: 'win11-24h2-ent'
+        version: 'latest'
       }
       osDisk: {
         name: 'osdisk-${vmName}'
@@ -110,11 +104,11 @@ resource windowsVMExtensions 'Microsoft.Compute/virtualMachines/extensions@2020-
     autoUpgradeMinorVersion: true
     settings: {
       fileUris: [
-        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/Set-ImagedWorkstation.ps1'
+        'https://raw.githubusercontent.com/waynehoggett/HackathonSetup/main/bicep/Setup-Workstation.ps1'
       ]
     }
     protectedSettings: {
-      commandToExecute: 'Powershell -ExecutionPolicy Bypass -File Set-ImagedWorkstation.ps1'
+      commandToExecute: 'Powershell -ExecutionPolicy Bypass -File Setup-Workstation.ps1'
     }
   }
 }
