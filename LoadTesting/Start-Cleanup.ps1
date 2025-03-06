@@ -1,7 +1,6 @@
 Connect-AzAccount -Identity
 Set-AzContext -Subscription "VSE"
 
-
 $Sessions = Invoke-RestMethod https://minicert.com/session/list -Method GET -ContentType "text/plain"
 foreach ($Session in $Sessions) {
     if ($Session.LabResourceGroupName) {
