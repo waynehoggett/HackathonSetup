@@ -27,7 +27,7 @@ resource ExistingSubnet 'Microsoft.Network/virtualNetworks/subnets@2022-07-01' e
 
 module VirtualNetwork 'br/public:avm/res/network/virtual-network:0.5.2' = {
   name: 'VNet1'
-  scope: resourceGroup('rg-vnet-8f7ea153-171d-4c5b-9e04-3c5fbc098154')
+  scope: resourceGroup('%VNET_RESOURCE_GROUP%')
   params: {
     name: 'VNet1'
     addressPrefixes: [
