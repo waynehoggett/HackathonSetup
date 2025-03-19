@@ -201,9 +201,9 @@ Describe "Symbolic Names and Outputs" -Tags 6 {
         $StorageAccount = Get-AzStorageAccount
         ($StorageAccount | Where-Object StorageAccountName -like "st*2").StorageAccountName | Should -Not -BeNullOrEmpty
     }
-    It "A storage account with a name starting with st and ending with 2 should exist" {
+    It "A storage account with a name starting with st and ending with 3 should exist" {
         $StorageAccount = Get-AzStorageAccount
-        ($StorageAccount | Where-Object StorageAccountName -like "st*2").StorageAccountName | Should -Not -BeNullOrEmpty
+        ($StorageAccount | Where-Object StorageAccountName -like "st*3").StorageAccountName | Should -Not -BeNullOrEmpty
     }
 }
 
@@ -375,6 +375,21 @@ Describe "Symbolic Names and Outputs" -Tags 12 {
         $BicepFile = Test-Path -Path "C:\Bicep\vnet.bicep"
         $BicepFile | Should -Be $True
     }
+    It "vnet.bicep should contain 10.0.0.0/16" {
+        $BicepFile = Get-Content -Path "C:\Bicep\vnet.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "10.0.0.0/16" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "vnet.bicep should contain 10.0.0.0/24" {
+        $BicepFile = Get-Content -Path "C:\Bicep\vnet.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "10.0.0.0/24" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "vnet.bicep should contain 10.0.1.0/24" {
+        $BicepFile = Get-Content -Path "C:\Bicep\vnet.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "10.0.1.0/24" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
     It "A single virtual network with an address range of 10.0.0.0/16 should exist" {
         $VirtualNetwork = Get-AzVirtualNetwork
         ($VirtualNetwork | Select-Object -ExpandProperty AddressSpace).AddressPrefixes | Should -Be '10.0.0.0/16'
@@ -397,12 +412,26 @@ Describe "Azure Verified Modules" -Tags 13 {
     It "C:\Bicep\vnet.bicep should not exist" {
         $BicepFile = Test-Path -Path "C:\Bicep\vnet.bicep"
         $BicepFile | Should -Be $False
-
     }
     It "main.bicep should contain an Azure Verified Module" {
         $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
         $Module = $BicepFile | Select-String -Pattern "br/public:avm" -SimpleMatch
         $Module | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain 10.0.0.0/16" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "10.0.0.0/16" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain 10.0.0.0/24" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "10.0.0.0/24" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
+    }
+    It "main.bicep should contain 10.0.1.0/24" {
+        $BicepFile = Get-Content -Path "C:\Bicep\main.bicep"
+        $RequiredResource = $BicepFile | Select-String -Pattern "10.0.1.0/24" -SimpleMatch
+        $RequiredResource | Should -Not -BeNullOrEmpty
     }
     It "A single virtual network with an address range of 10.0.0.0/16 should exist" {
         $VirtualNetwork = Get-AzVirtualNetwork
